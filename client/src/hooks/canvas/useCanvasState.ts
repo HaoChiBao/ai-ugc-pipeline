@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useReducer, useRef, useEffect } from "react";
-import type { CanvasItem, ImageCanvasItem } from "@/lib/canvas/types";
+import type { CanvasItem, CanvasItemPatch } from "@/lib/canvas/types";
 import { revokeObjectUrl } from "@/lib/canvas/files";
 
 type CanvasDocState = {
@@ -13,11 +13,7 @@ type Action =
   | { type: "ADD_ITEM"; item: CanvasItem }
   | { type: "REMOVE_ITEM"; id: string }
   | { type: "CLEAR_ALL" }
-  | {
-      type: "PATCH_ITEM";
-      id: string;
-      patch: Partial<Pick<ImageCanvasItem, "x" | "y" | "width" | "height">>;
-    }
+  | { type: "PATCH_ITEM"; id: string; patch: CanvasItemPatch }
   | { type: "SELECT"; id: string | null };
 
 function reducer(state: CanvasDocState, action: Action): CanvasDocState {
@@ -41,9 +37,7 @@ function reducer(state: CanvasDocState, action: Action): CanvasDocState {
       return {
         ...state,
         items: state.items.map((i) =>
-          i.id === action.id && i.type === "image"
-            ? { ...i, ...action.patch }
-            : i,
+          i.id === action.id ? ({ ...i, ...action.patch } as CanvasItem) : i,
         ),
       };
     case "SELECT":
@@ -69,15 +63,9 @@ export function useCanvasState() {
     dispatch({ type: "ADD_ITEM", item });
   }, []);
 
-  const patchItem = useCallback(
-    (
-      id: string,
-      patch: Partial<Pick<ImageCanvasItem, "x" | "y" | "width" | "height">>,
-    ) => {
-      dispatch({ type: "PATCH_ITEM", id, patch });
-    },
-    [],
-  );
+  const patchItem = useCallback((id: string, patch: CanvasItemPatch) => {
+    dispatch({ type: "PATCH_ITEM", id, patch });
+  }, []);
 
   const select = useCallback((id: string | null) => {
     dispatch({ type: "SELECT", id });

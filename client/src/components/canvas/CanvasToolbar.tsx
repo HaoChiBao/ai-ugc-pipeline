@@ -2,6 +2,7 @@
 
 import {
   ImagePlus,
+  Music2,
   RefreshCw,
   Trash2,
 } from "lucide-react";
@@ -16,6 +17,7 @@ import { cn } from "@/lib/utils";
 
 type CanvasToolbarProps = {
   onUploadClick: () => void;
+  onAddTikTokClick: () => void;
   onResetView: () => void;
   onDeleteSelected?: () => void;
   hasSelection: boolean;
@@ -24,6 +26,7 @@ type CanvasToolbarProps = {
 
 export function CanvasToolbar({
   onUploadClick,
+  onAddTikTokClick,
   onResetView,
   onDeleteSelected,
   hasSelection,
@@ -66,6 +69,27 @@ export function CanvasToolbar({
               <Button
                 {...props}
                 type="button"
+                variant="outline"
+                size="icon-sm"
+                aria-label="Add TikTok URL"
+                onClick={(e) => {
+                  props.onClick?.(e);
+                  onAddTikTokClick();
+                }}
+              >
+                <Music2 className="size-4" />
+              </Button>
+            )}
+          />
+          <TooltipContent side="top">Add TikTok URL</TooltipContent>
+        </Tooltip>
+
+        <Tooltip>
+          <TooltipTrigger
+            render={(props) => (
+              <Button
+                {...props}
+                type="button"
                 variant="ghost"
                 size="icon-sm"
                 aria-label="Reset pan and zoom"
@@ -92,7 +116,7 @@ export function CanvasToolbar({
                 type="button"
                 variant="ghost"
                 size="icon-sm"
-                aria-label="Remove selected image"
+                aria-label="Remove selected item"
                 disabled={!hasSelection}
                 onClick={(e) => {
                   props.onClick?.(e);

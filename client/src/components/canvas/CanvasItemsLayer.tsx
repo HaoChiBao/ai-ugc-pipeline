@@ -1,7 +1,8 @@
 "use client";
 
-import type { CanvasItem, ImageCanvasItem } from "@/lib/canvas/types";
+import type { CanvasItem, CanvasItemPatch } from "@/lib/canvas/types";
 import { CanvasImageItem } from "./CanvasImageItem";
+import { CanvasTikTokItem } from "./CanvasTikTokItem";
 
 type ToWorld = (clientX: number, clientY: number) => { x: number; y: number };
 
@@ -10,10 +11,7 @@ type CanvasItemsLayerProps = {
   selectedId: string | null;
   toWorld: ToWorld;
   onSelect: (id: string | null) => void;
-  onUpdateItem: (
-    id: string,
-    patch: Partial<Pick<ImageCanvasItem, "x" | "y" | "width" | "height">>,
-  ) => void;
+  onUpdateItem: (id: string, patch: CanvasItemPatch) => void;
 };
 
 export function CanvasItemsLayer({
@@ -29,6 +27,18 @@ export function CanvasItemsLayer({
         if (item.type === "image") {
           return (
             <CanvasImageItem
+              key={item.id}
+              item={item}
+              isSelected={selectedId === item.id}
+              toWorld={toWorld}
+              onSelect={() => onSelect(item.id)}
+              onUpdate={(patch) => onUpdateItem(item.id, patch)}
+            />
+          );
+        }
+        if (item.type === "tiktok") {
+          return (
+            <CanvasTikTokItem
               key={item.id}
               item={item}
               isSelected={selectedId === item.id}

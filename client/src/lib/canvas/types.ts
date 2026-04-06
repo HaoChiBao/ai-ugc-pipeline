@@ -1,4 +1,4 @@
-export type CanvasItemType = "image";
+export type CanvasItemType = "image" | "tiktok";
 
 export type CanvasItemBase = {
   id: string;
@@ -15,7 +15,33 @@ export type ImageCanvasItem = CanvasItemBase & {
   src: string;
 };
 
-export type CanvasItem = ImageCanvasItem;
+export type TikTokPreviewStatus = "loading" | "ready" | "error";
+
+export type TikTokCanvasItem = CanvasItemBase & {
+  type: "tiktok";
+  url: string;
+  title: string;
+  thumbnailUrl: string | null;
+  authorName: string | null;
+  previewStatus: TikTokPreviewStatus;
+  previewError?: string;
+};
+
+export type CanvasItem = ImageCanvasItem | TikTokCanvasItem;
+
+/** Merged patches for reducer updates (geometry + type-specific fields). */
+export type CanvasItemPatch = Partial<
+  Pick<CanvasItemBase, "x" | "y" | "width" | "height">
+> &
+  Partial<{
+    src: string;
+    url: string;
+    title: string;
+    thumbnailUrl: string | null;
+    authorName: string | null;
+    previewStatus: TikTokPreviewStatus;
+    previewError: string | undefined;
+  }>;
 
 export type ViewportState = {
   panX: number;
@@ -26,3 +52,6 @@ export type ViewportState = {
 export const MIN_ZOOM = 0.1;
 export const MAX_ZOOM = 4;
 export const DEFAULT_ZOOM = 1;
+
+export const DEFAULT_TIKTOK_NODE_WIDTH = 340;
+export const DEFAULT_TIKTOK_NODE_HEIGHT = 260;
