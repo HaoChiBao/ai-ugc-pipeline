@@ -1,0 +1,39 @@
+Primary category
+--------------------
+landscape
+
+Secondary category
+----------------------
+
+
+Scene summary
+-----------------
+The image depicts a serene rural road flanked by tall trees on both sides. The road stretches into the distance, disappearing into a lush green canopy. The sky is clear with a few wispy clouds, suggesting a calm day.
+
+Subjects & objects
+----------------------
+Main subjects include the road, tall trees, and a clear sky. Notable objects are the street lamps lining the road and the grassy verge.
+
+Fine details
+----------------
+The texture of the road surface is slightly rough. There are faint dashed lines on the road. The trees cast soft shadows on the road. There is a subtle gradient in the sky from blue to a lighter hue near the horizon.
+
+Composition & camera
+------------------------
+The image is framed with the road leading the eye into the distance, creating a sense of depth. The trees on either side provide a natural frame, and the image follows the rule of thirds with the road positioned centrally.
+
+Lighting & color
+--------------------
+The lighting is warm and soft, likely from a low sun angle, creating gentle shadows. The color palette includes greens, blues, and earthy tones, with a warm golden hue from the sunlight.
+
+On-screen text
+------------------
+(none)
+
+Mood & intent
+-----------------
+The mood is peaceful and contemplative, likely intended to evoke a sense of tranquility and appreciation for nature. It may be used to promote outdoor activities or rural tourism.
+
+Category tags
+-----------------
+outdoor, nature, road, trees, sunlight, peaceful, rural, landscape

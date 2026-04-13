@@ -1,0 +1,39 @@
+Primary category
+--------------------
+landscape
+
+Secondary category
+----------------------
+outdoor track
+
+Scene summary
+-----------------
+The image shows a curved running track surrounded by lush greenery. Tall trees and palm trees line the track, creating a serene outdoor setting. The sky is partly cloudy, casting a soft light over the scene.
+
+Subjects & objects
+----------------------
+Running track, palm trees, tall trees, trash bin, hedge, grass, cloudy sky.
+
+Fine details
+----------------
+The track has white lane markings and small yellow arrows. There is a trash bin and a small sign near the track. The grass is well-maintained, and there are subtle shadows on the track.
+
+Composition & camera
+------------------------
+The image is taken from a low angle, following the curve of the track, leading the eye into the distance. The composition uses the rule of thirds, with the track occupying the lower third and the trees filling the upper two-thirds.
+
+Lighting & color
+--------------------
+The lighting is soft and diffused due to the cloud cover, with gentle shadows. The color palette includes rich greens from the trees and grass, and a deep red from the track.
+
+On-screen text
+------------------
+(none)
+
+Mood & intent
+-----------------
+The mood is calm and inviting, likely intended to showcase the beauty and tranquility of the outdoor track environment.
+
+Category tags
+-----------------
+outdoor, running-track, trees, greenery, cloudy, landscape, nature

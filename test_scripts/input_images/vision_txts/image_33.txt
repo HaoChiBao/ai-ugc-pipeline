@@ -1,0 +1,39 @@
+Primary category
+--------------------
+selfie
+
+Secondary category
+----------------------
+outdoor
+
+Scene summary
+-----------------
+The image shows a person taking a selfie while jogging along a scenic lakeside path. The background features a calm lake reflecting the surrounding hills and a partly cloudy sky. The person is smiling and wearing athletic gear, including sunglasses and earbuds.
+
+Subjects & objects
+----------------------
+The main subject is a person jogging. Notable objects include sunglasses, earbuds, athletic clothing, and a lake with hills in the background.
+
+Fine details
+----------------
+The image captures reflections on the lake's surface and subtle textures of the running path. There are small details like the person's bracelet and the texture of the grass along the path.
+
+Composition & camera
+------------------------
+The image is taken from a first-person perspective with an extended arm, creating a dynamic and engaging angle. The composition uses the rule of thirds, with the person positioned prominently in the foreground and the landscape providing depth.
+
+Lighting & color
+--------------------
+The lighting is bright and natural, suggesting midday sun. Shadows are soft, and the color palette is vibrant with blues, greens, and earth tones. The white balance appears neutral.
+
+On-screen text
+------------------
+(none)
+
+Mood & intent
+-----------------
+The mood is energetic and joyful, likely intended to capture a moment of outdoor exercise and enjoyment of nature. The image conveys a sense of freedom and vitality.
+
+Category tags
+-----------------
+outdoor, selfie, jogging, lake, nature, exercise, sunny, landscape, athletic

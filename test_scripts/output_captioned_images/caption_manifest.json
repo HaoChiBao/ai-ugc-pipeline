@@ -1,0 +1,164 @@
+{
+  "created_at": "2026-04-07T14:38:08.340934+00:00",
+  "prompt": "The perfect running routine as a beginner",
+  "provider": "openai",
+  "theme_title": "Your Perfect Beginner Running Routine",
+  "theme_description": "Start simple. Build trust with your body. This routine meets you where you are and moves you forward\u2014one step at a time.",
+  "num_slides": 7,
+  "text_layout": {
+    "mode": "varied_per_slide",
+    "horizontal": "center",
+    "vertical": "varied_per_slide",
+    "placement_seed": null,
+    "run_seed_used_for_placement": false,
+    "font_size_ratio_center": 0.048
+  },
+  "text_style": {
+    "vertical_anchor": "bottom",
+    "horizontal_anchor": "center",
+    "shift_x_ratio": 0.0,
+    "shift_y_ratio": 0.0,
+    "margin_x_ratio": 0.06,
+    "margin_y_ratio": 0.11,
+    "font_size_ratio": 0.048,
+    "shadow": true,
+    "note": "Used when --fixed-layout; otherwise see text_layout and per-slide text_style"
+  },
+  "slides": [
+    {
+      "index": 1,
+      "source_image": "C:\\Users\\james\\OneDrive\\Documents\\Github\\ai-ugc-pipeline\\test_scripts\\input_text_images\\rungirl1.jpg",
+      "caption": "You don\u2019t need to run fast or far today. Just start moving.",
+      "output": "C:\\Users\\james\\OneDrive\\Documents\\Github\\ai-ugc-pipeline\\test_scripts\\output_captioned_images\\slide_01.png",
+      "text_style": {
+        "vertical_anchor": "top",
+        "horizontal_anchor": "center",
+        "margin_x_ratio": 0.07258383188515638,
+        "margin_y_ratio": 0.14158720288202892,
+        "shift_x_ratio": 0.0,
+        "shift_y_ratio": -0.06284345114775565,
+        "font_size_ratio": 0.048,
+        "max_width_ratio": 0.88,
+        "vertical_safe_margin_ratio": 0.1,
+        "shadow": true
+      }
+    },
+    {
+      "index": 2,
+      "source_image": "C:\\Users\\james\\OneDrive\\Documents\\Github\\ai-ugc-pipeline\\test_scripts\\input_text_images\\image_25.jpg",
+      "caption": "Warm up with 5 minutes of walking. Get your body ready, no rush.",
+      "output": "C:\\Users\\james\\OneDrive\\Documents\\Github\\ai-ugc-pipeline\\test_scripts\\output_captioned_images\\slide_02.png",
+      "text_style": {
+        "vertical_anchor": "center",
+        "horizontal_anchor": "center",
+        "margin_x_ratio": 0.05555606291833616,
+        "margin_y_ratio": 0.1042240668394765,
+        "shift_x_ratio": 0.0,
+        "shift_y_ratio": -0.03537866427352132,
+        "font_size_ratio": 0.048,
+        "max_width_ratio": 0.88,
+        "vertical_safe_margin_ratio": 0.1,
+        "shadow": true
+      }
+    },
+    {
+      "index": 3,
+      "source_image": "C:\\Users\\james\\OneDrive\\Documents\\Github\\ai-ugc-pipeline\\test_scripts\\input_text_images\\image_7.jpg",
+      "caption": "Run easy for 1 minute. No pressure, just breathe and move.",
+      "output": "C:\\Users\\james\\OneDrive\\Documents\\Github\\ai-ugc-pipeline\\test_scripts\\output_captioned_images\\slide_03.png",
+      "text_style": {
+        "vertical_anchor": "top",
+        "horizontal_anchor": "center",
+        "margin_x_ratio": 0.05364528289246073,
+        "margin_y_ratio": 0.1141136605673033,
+        "shift_x_ratio": 0.0,
+        "shift_y_ratio": 0.03357809934299191,
+        "font_size_ratio": 0.048,
+        "max_width_ratio": 0.88,
+        "vertical_safe_margin_ratio": 0.1,
+        "shadow": true
+      }
+    },
+    {
+      "index": 4,
+      "source_image": "C:\\Users\\james\\OneDrive\\Documents\\Github\\ai-ugc-pipeline\\test_scripts\\input_text_images\\image_17.jpg",
+      "caption": "Walk for 2 minutes to catch your breath. Repeat this 5 times.",
+      "output": "C:\\Users\\james\\OneDrive\\Documents\\Github\\ai-ugc-pipeline\\test_scripts\\output_captioned_images\\slide_04.png",
+      "text_style": {
+        "vertical_anchor": "bottom",
+        "horizontal_anchor": "center",
+        "margin_x_ratio": 0.07996557124768695,
+        "margin_y_ratio": 0.1113975454048774,
+        "shift_x_ratio": 0.0,
+        "shift_y_ratio": 0.12133039578584923,
+        "font_size_ratio": 0.048,
+        "max_width_ratio": 0.88,
+        "vertical_safe_margin_ratio": 0.1,
+        "shadow": true
+      }
+    },
+    {
+      "index": 5,
+      "source_image": "C:\\Users\\james\\OneDrive\\Documents\\Github\\ai-ugc-pipeline\\test_scripts\\input_text_images\\image_14.jpg",
+      "caption": "Cool down with 5 minutes walking. Celebrate what you just did.",
+      "output": "C:\\Users\\james\\OneDrive\\Documents\\Github\\ai-ugc-pipeline\\test_scripts\\output_captioned_images\\slide_05.png",
+      "text_style": {
+        "vertical_anchor": "bottom",
+        "horizontal_anchor": "center",
+        "margin_x_ratio": 0.055091349506606414,
+        "margin_y_ratio": 0.14607653165773027,
+        "shift_x_ratio": 0.0,
+        "shift_y_ratio": -0.1260853188505758,
+        "font_size_ratio": 0.048,
+        "max_width_ratio": 0.88,
+        "vertical_safe_margin_ratio": 0.1,
+        "shadow": true
+      }
+    },
+    {
+      "index": 6,
+      "source_image": "C:\\Users\\james\\OneDrive\\Documents\\Github\\ai-ugc-pipeline\\test_scripts\\input_text_images\\image_29.jpg",
+      "caption": "Do this 3 times a week. Consistency beats intensity right now.",
+      "output": "C:\\Users\\james\\OneDrive\\Documents\\Github\\ai-ugc-pipeline\\test_scripts\\output_captioned_images\\slide_06.png",
+      "text_style": {
+        "vertical_anchor": "bottom",
+        "horizontal_anchor": "center",
+        "margin_x_ratio": 0.08780647960017465,
+        "margin_y_ratio": 0.12811578998452927,
+        "shift_x_ratio": 0.0,
+        "shift_y_ratio": -0.06841333786161094,
+        "font_size_ratio": 0.048,
+        "max_width_ratio": 0.88,
+        "vertical_safe_margin_ratio": 0.1,
+        "shadow": true
+      }
+    },
+    {
+      "index": 7,
+      "source_image": "C:\\Users\\james\\OneDrive\\Documents\\Github\\ai-ugc-pipeline\\test_scripts\\input_text_images\\image_8.jpg",
+      "caption": "Remember: Every step builds momentum. You\u2019re closer than you think.",
+      "output": "C:\\Users\\james\\OneDrive\\Documents\\Github\\ai-ugc-pipeline\\test_scripts\\output_captioned_images\\slide_07.png",
+      "text_style": {
+        "vertical_anchor": "center",
+        "horizontal_anchor": "center",
+        "margin_x_ratio": 0.07715814094521055,
+        "margin_y_ratio": 0.12879471453321936,
+        "shift_x_ratio": 0.0,
+        "shift_y_ratio": 0.0011100218232275305,
+        "font_size_ratio": 0.048,
+        "max_width_ratio": 0.88,
+        "vertical_safe_margin_ratio": 0.1,
+        "shadow": true
+      }
+    }
+  ],
+  "supported_input_extensions": [
+    ".bmp",
+    ".gif",
+    ".jpeg",
+    ".jpg",
+    ".png",
+    ".webp"
+  ],
+  "image_generation": "none \u2014 source images only, captions from LLM"
+}

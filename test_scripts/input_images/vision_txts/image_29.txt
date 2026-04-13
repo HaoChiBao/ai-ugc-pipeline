@@ -1,0 +1,39 @@
+Primary category
+--------------------
+selfie
+
+Secondary category
+----------------------
+outdoor
+
+Scene summary
+-----------------
+The image shows a person taking a selfie while running on a gravel path through a field. The landscape is expansive, with a clear sky and a few clouds. The sun appears to be setting, casting a warm glow over the scene.
+
+Subjects & objects
+----------------------
+The main subject is a person in athletic wear, including a sports bra and shorts, with earbuds in their ears. The setting is a rural landscape with grass fields and distant power lines.
+
+Fine details
+----------------
+The person is wearing a bracelet on their wrist. There are subtle textures in the gravel path and grass. The sky has a gradient from blue to orange, indicating sunset. The earbuds are small and white.
+
+Composition & camera
+------------------------
+The image is taken from a first-person perspective, with the arm extended forward. The composition uses the rule of thirds, with the horizon line placed in the upper third. There is a sense of depth with the path leading into the distance.
+
+Lighting & color
+--------------------
+The lighting is warm and soft, typical of golden hour. Shadows are minimal, and the color palette includes blues, greens, and warm oranges. The white balance is set to emphasize the warmth of the sunset.
+
+On-screen text
+------------------
+(none)
+
+Mood & intent
+-----------------
+The mood is energetic and serene, capturing a moment of exercise and connection with nature. The intent is likely to share a personal fitness journey or the beauty of the outdoor setting.
+
+Category tags
+-----------------
+outdoor, running, selfie, golden-hour, fitness, landscape, sunset

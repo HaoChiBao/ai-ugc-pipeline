@@ -1,0 +1,39 @@
+Primary category
+--------------------
+UGC
+
+Secondary category
+----------------------
+fitness
+
+Scene summary
+-----------------
+The image shows a person lying on a running track at night. The individual appears to be resting or exhausted, wearing athletic clothing. The background includes trees and a building with lights.
+
+Subjects & objects
+----------------------
+Main subject is a person in athletic wear on a track. Notable objects include the running track, trees, and a lit building in the background.
+
+Fine details
+----------------
+The track has visible lane markings. There is a slight lens flare or light haze effect near the bottom left. The building in the background has illuminated windows.
+
+Composition & camera
+------------------------
+The image is taken from a low angle, focusing on the person in the foreground. The depth of field is shallow, with the background slightly out of focus. The subject is placed off-center, following the rule of thirds.
+
+Lighting & color
+--------------------
+The lighting is artificial, likely from a flash, creating harsh shadows. The color palette is dominated by dark tones with some warm light from the building.
+
+On-screen text
+------------------
+(none)
+
+Mood & intent
+-----------------
+The mood suggests exhaustion or relaxation after physical activity. The intent might be to capture a moment of rest or achievement in a fitness context.
+
+Category tags
+-----------------
+night, track, athlete, rest, fitness, outdoor, exercise, urban

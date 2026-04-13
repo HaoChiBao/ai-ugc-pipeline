@@ -1,0 +1,166 @@
+{
+  "created_at": "2026-04-07T20:11:24.833044+00:00",
+  "user_prompt": "Top 5 things i wished i knew before starting running",
+  "openai_plan": {
+    "theme_title": "5 Things I Wish I Knew Before Running",
+    "theme_description": "Real talk on running lessons that save you time and frustration. Run smarter, not harder, from day one",
+    "num_slides": 6,
+    "slides": [
+      {
+        "caption": "5 things I wish I knew before I started running",
+        "shot_direction": "wide shot of empty running track at sunrise, no person in frame"
+      },
+      {
+        "caption": "You don\u2019t need to start fast, slow wins the race",
+        "shot_direction": "close-up on runner\u2019s feet gently hitting pavement, soft morning light"
+      },
+      {
+        "caption": "Rest days are part of progress, not failure",
+        "shot_direction": "flat lay of worn running shoes next to a water bottle and a resting journal on wooden floor"
+      },
+      {
+        "caption": "A good pair of shoes beats pushing through pain",
+        "shot_direction": "side profile of runner tying sleek running shoes on park bench, focus on hands and shoes"
+      },
+      {
+        "caption": "Consistency beats motivation every single time",
+        "shot_direction": "POV shot looking down at smartwatch tracking steady pace mid-run on trail"
+      },
+      {
+        "caption": "Start with these, your future self will thank you, keep going",
+        "shot_direction": "hero shot of runner on hilltop at sunset, arms raised in quiet victory, full body"
+      }
+    ]
+  },
+  "reference_images": [
+    "C:\\Users\\james\\OneDrive\\Documents\\Github\\ai-ugc-pipeline\\test_scripts\\input_images\\rungirl.jpg",
+    "C:\\Users\\james\\OneDrive\\Documents\\Github\\ai-ugc-pipeline\\test_scripts\\input_images\\image_25.jpg",
+    "C:\\Users\\james\\OneDrive\\Documents\\Github\\ai-ugc-pipeline\\test_scripts\\input_images\\image_10.jpg"
+  ],
+  "caption_style": "stroke",
+  "stroke_drop_shadow": false,
+  "finished_slides": [
+    {
+      "index": 1,
+      "caption": "5 things I wish I knew before I started running",
+      "shot_direction": "wide shot of empty running track at sunrise, no person in frame",
+      "finished": "C:\\Users\\james\\OneDrive\\Documents\\Github\\ai-ugc-pipeline\\test_scripts\\finished_slides\\slide_01.png",
+      "raw_generated": null,
+      "text_style": {
+        "vertical_anchor": "bottom",
+        "horizontal_anchor": "center",
+        "margin_x_ratio": 0.06687458980692487,
+        "margin_y_ratio": 0.15698547436749666,
+        "shift_x_ratio": 0.0,
+        "shift_y_ratio": -0.012626299341616493,
+        "font_size_ratio": 0.048,
+        "max_width_ratio": 0.88,
+        "vertical_safe_margin_ratio": 0.1,
+        "shadow": false
+      }
+    },
+    {
+      "index": 2,
+      "caption": "You don\u2019t need to start fast, slow wins the race",
+      "shot_direction": "close-up on runner\u2019s feet gently hitting pavement, soft morning light",
+      "finished": "C:\\Users\\james\\OneDrive\\Documents\\Github\\ai-ugc-pipeline\\test_scripts\\finished_slides\\slide_02.png",
+      "raw_generated": null,
+      "text_style": {
+        "vertical_anchor": "center",
+        "horizontal_anchor": "center",
+        "margin_x_ratio": 0.08692393113386958,
+        "margin_y_ratio": 0.15255556767928563,
+        "shift_x_ratio": 0.0,
+        "shift_y_ratio": -0.04188354282122095,
+        "font_size_ratio": 0.048,
+        "max_width_ratio": 0.88,
+        "vertical_safe_margin_ratio": 0.1,
+        "shadow": false
+      }
+    },
+    {
+      "index": 3,
+      "caption": "Rest days are part of progress, not failure",
+      "shot_direction": "flat lay of worn running shoes next to a water bottle and a resting journal on wooden floor",
+      "finished": "C:\\Users\\james\\OneDrive\\Documents\\Github\\ai-ugc-pipeline\\test_scripts\\finished_slides\\slide_03.png",
+      "raw_generated": null,
+      "text_style": {
+        "vertical_anchor": "top",
+        "horizontal_anchor": "center",
+        "margin_x_ratio": 0.0783060094337841,
+        "margin_y_ratio": 0.15469953447719595,
+        "shift_x_ratio": 0.0,
+        "shift_y_ratio": -0.14151376922747563,
+        "font_size_ratio": 0.048,
+        "max_width_ratio": 0.88,
+        "vertical_safe_margin_ratio": 0.1,
+        "shadow": false
+      }
+    },
+    {
+      "index": 4,
+      "caption": "A good pair of shoes beats pushing through pain",
+      "shot_direction": "side profile of runner tying sleek running shoes on park bench, focus on hands and shoes",
+      "finished": "C:\\Users\\james\\OneDrive\\Documents\\Github\\ai-ugc-pipeline\\test_scripts\\finished_slides\\slide_04.png",
+      "raw_generated": null,
+      "text_style": {
+        "vertical_anchor": "center",
+        "horizontal_anchor": "center",
+        "margin_x_ratio": 0.08885113692439224,
+        "margin_y_ratio": 0.10195928052530816,
+        "shift_x_ratio": 0.0,
+        "shift_y_ratio": 0.11751366961563417,
+        "font_size_ratio": 0.048,
+        "max_width_ratio": 0.88,
+        "vertical_safe_margin_ratio": 0.1,
+        "shadow": false
+      }
+    },
+    {
+      "index": 5,
+      "caption": "Consistency beats motivation every single time",
+      "shot_direction": "POV shot looking down at smartwatch tracking steady pace mid-run on trail",
+      "finished": "C:\\Users\\james\\OneDrive\\Documents\\Github\\ai-ugc-pipeline\\test_scripts\\finished_slides\\slide_05.png",
+      "raw_generated": null,
+      "text_style": {
+        "vertical_anchor": "bottom",
+        "horizontal_anchor": "center",
+        "margin_x_ratio": 0.05399367173459642,
+        "margin_y_ratio": 0.1272172658092567,
+        "shift_x_ratio": 0.0,
+        "shift_y_ratio": -0.041244573805259435,
+        "font_size_ratio": 0.048,
+        "max_width_ratio": 0.88,
+        "vertical_safe_margin_ratio": 0.1,
+        "shadow": false
+      }
+    },
+    {
+      "index": 6,
+      "caption": "Start with these, your future self will thank you, keep going",
+      "shot_direction": "hero shot of runner on hilltop at sunset, arms raised in quiet victory, full body",
+      "finished": "C:\\Users\\james\\OneDrive\\Documents\\Github\\ai-ugc-pipeline\\test_scripts\\finished_slides\\slide_06.png",
+      "raw_generated": null,
+      "text_style": {
+        "vertical_anchor": "bottom",
+        "horizontal_anchor": "center",
+        "margin_x_ratio": 0.06209872748665786,
+        "margin_y_ratio": 0.13336339644845058,
+        "shift_x_ratio": 0.0,
+        "shift_y_ratio": -0.03654979459074589,
+        "font_size_ratio": 0.048,
+        "max_width_ratio": 0.88,
+        "vertical_safe_margin_ratio": 0.1,
+        "shadow": false
+      }
+    }
+  ],
+  "supported_input_extensions": [
+    ".bmp",
+    ".gif",
+    ".jpeg",
+    ".jpg",
+    ".png",
+    ".webp"
+  ]
+}

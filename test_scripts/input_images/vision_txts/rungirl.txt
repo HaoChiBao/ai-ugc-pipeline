@@ -1,0 +1,39 @@
+Primary category
+--------------------
+UGC
+
+Secondary category
+----------------------
+outdoor activity
+
+Scene summary
+-----------------
+The image shows a person jogging on a paved road surrounded by greenery. The shadow of the person is prominently cast on the road, indicating the direction of the sunlight. The scene is set in a natural environment with trees and grass lining the road.
+
+Subjects & objects
+----------------------
+Main subject is the shadow of a person jogging, with visible legs and shoes. The setting includes a paved road, grass, and trees.
+
+Fine details
+----------------
+The texture of the asphalt is visible with small pebbles and cracks. The grass shows a variety of green shades. The shadow is sharply defined, suggesting strong sunlight.
+
+Composition & camera
+------------------------
+The image is taken from a first-person perspective, looking down at the shadow. The angle is slightly tilted, capturing both the road and the grass. The shadow is centered, following the rule of thirds.
+
+Lighting & color
+--------------------
+The lighting is bright and direct, casting a clear shadow. The color palette includes greens from the grass and blues from the sky. The white balance is neutral, with natural colors.
+
+On-screen text
+------------------
+(none)
+
+Mood & intent
+-----------------
+The mood is energetic and active, likely intended to capture a moment of exercise or outdoor enjoyment. It conveys a sense of movement and freedom.
+
+Category tags
+-----------------
+outdoor, jogging, shadow, nature, exercise, sunny, road, greenery
