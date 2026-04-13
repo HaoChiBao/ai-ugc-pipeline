@@ -1,0 +1,39 @@
+Primary category
+--------------------
+UGC
+
+Secondary category
+----------------------
+action
+
+Scene summary
+-----------------
+The image shows a person running on a paved path during sunset. The path is lined with a fence on one side and greenery on the other. The sky is a gradient of warm colors, indicating the end of the day.
+
+Subjects & objects
+----------------------
+A person in athletic wear, a paved running path, a fence, trees, and a streetlight.
+
+Fine details
+----------------
+The image is slightly blurred, suggesting motion. There are subtle shadows on the path. The fence has a chain-link pattern.
+
+Composition & camera
+------------------------
+The image is taken from a slightly low angle, following the runner from behind. The composition uses leading lines from the path to guide the eye. The runner is positioned off-center, creating dynamic movement.
+
+Lighting & color
+--------------------
+The lighting is soft with a warm palette from the sunset. Shadows are long and diffuse. The overall color balance leans towards warm hues.
+
+On-screen text
+------------------
+(none)
+
+Mood & intent
+-----------------
+The mood is energetic and serene, capturing a moment of exercise and tranquility. The intent is likely to convey a sense of freedom and the beauty of outdoor activity.
+
+Category tags
+-----------------
+outdoor, running, sunset, exercise, motion, warm-colors, pathway, fence, blur

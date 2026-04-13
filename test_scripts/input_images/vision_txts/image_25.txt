@@ -1,0 +1,39 @@
+Primary category
+--------------------
+landscape
+
+Secondary category
+----------------------
+artistic
+
+Scene summary
+-----------------
+The image shows a red path with white wavy lines running along its length, set in a green park. The path is surrounded by lush grass and trees, creating a natural and serene environment.
+
+Subjects & objects
+----------------------
+Main subject is the red path with white lines. The setting includes grass, trees, and a clear sky.
+
+Fine details
+----------------
+The white lines on the path are slightly irregular and wavy. The grass appears well-maintained, and there are subtle variations in the texture of the path.
+
+Composition & camera
+------------------------
+The image is taken from a low angle, emphasizing the path leading into the distance. The path is centered, creating a symmetrical composition with the trees framing the scene.
+
+Lighting & color
+--------------------
+The lighting is soft and diffused, likely due to overcast conditions. The color palette includes earthy reds, greens, and whites, with a balanced white balance.
+
+On-screen text
+------------------
+(none)
+
+Mood & intent
+-----------------
+The mood is calm and contemplative, likely intended to evoke a sense of tranquility and artistic appreciation of nature.
+
+Category tags
+-----------------
+outdoor, path, nature, artistic, greenery, trees, serene

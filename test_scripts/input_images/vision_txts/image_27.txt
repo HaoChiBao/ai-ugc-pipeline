@@ -1,0 +1,39 @@
+Primary category
+--------------------
+landscape
+
+Secondary category
+----------------------
+urban
+
+Scene summary
+-----------------
+The image shows a cityscape with a prominent skyline featuring tall buildings, including a distinctive tower. A riverside walkway is in the foreground, with several people jogging and walking. The scene is set during the day with a clear sky.
+
+Subjects & objects
+----------------------
+Main subjects include the skyline with skyscrapers, a riverside walkway, joggers, and pedestrians. Notable objects are the railing along the walkway and street lamps.
+
+Fine details
+----------------
+The pavement has a textured pattern, and there are faint reflections on the water. Shadows from the railing and lamps stretch across the walkway. The sky has a gradient from blue to light near the horizon.
+
+Composition & camera
+------------------------
+The image is taken from a low angle, emphasizing the depth of the walkway leading to the skyline. The composition uses leading lines from the railing and path to draw the eye toward the buildings. The rule of thirds is applied with the horizon and skyline.
+
+Lighting & color
+--------------------
+The lighting is natural with soft shadows indicating early morning or late afternoon. The color palette includes blues, grays, and greens, with a balanced white balance.
+
+On-screen text
+------------------
+(none)
+
+Mood & intent
+-----------------
+The mood is calm and serene, capturing a moment of daily life in an urban setting. The intent is likely to showcase the beauty and activity of the city environment.
+
+Category tags
+-----------------
+urban, cityscape, riverside, jogging, skyline, daytime, outdoor, walkway, architecture

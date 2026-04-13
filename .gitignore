@@ -1,1 +1,51 @@
 debug.log
+
+.env
+client/.local-storage
+
+# Generated TikTok analysis outputs (images + manifests)
+test_scripts/tiktok_slideshow_analysis/
+
+# Pinterest search downloads (download_pinterest_search.py)
+test_scripts/pinterest_downloads/
+
+# Local TikTok/download experiments (long Windows paths, not for repo)
+test_scripts/_dltest/
+
+# Python virtualenv under test_scripts
+test_scripts/venv/
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+
+# Slides / exports under test_scripts
+test_scripts/finished_slides/
+
+# Raster images repo-wide (avoid committing large binaries)
+*.png
+*.jpg
+*.jpeg
+*.jpe
+*.gif
+*.webp
+*.bmp
+*.ico
+*.tiff
+*.tif
+*.avif
+*.heic
+
+# Keep Next.js `public/` assets trackable
+!client/public/**/*.png
+!client/public/**/*.jpg
+!client/public/**/*.jpeg
+!client/public/**/*.jpe
+!client/public/**/*.gif
+!client/public/**/*.webp
+!client/public/**/*.bmp
+!client/public/**/*.ico
+!client/public/**/*.tiff
+!client/public/**/*.tif
+!client/public/**/*.avif
+!client/public/**/*.heic

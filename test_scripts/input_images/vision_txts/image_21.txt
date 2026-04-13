@@ -1,0 +1,39 @@
+Primary category
+--------------------
+landscape
+
+Secondary category
+----------------------
+sports
+
+Scene summary
+-----------------
+The image shows a sports stadium with a running track in the foreground and bleachers in the background. The sky is filled with vibrant colors from a sunset, creating a picturesque backdrop. The scene is calm and empty, suggesting a peaceful moment at the end of the day.
+
+Subjects & objects
+----------------------
+Running track, bleachers, stadium lights, sunset sky.
+
+Fine details
+----------------
+The texture of the running track is visible with its distinct red color and white lane markings. The bleachers are empty, and there are no visible people. The sky has a gradient of colors from pink to blue.
+
+Composition & camera
+------------------------
+The image is taken from a low angle, emphasizing the curve of the track leading towards the bleachers. The horizon is placed lower, allowing the sky to dominate the frame. The composition follows the rule of thirds, with the track and bleachers occupying the lower third.
+
+Lighting & color
+--------------------
+The lighting is natural, with the sunset providing a warm, soft glow. Shadows are minimal due to the even distribution of light. The color palette includes pink, orange, and blue hues, creating a serene and warm atmosphere.
+
+On-screen text
+------------------
+(none)
+
+Mood & intent
+-----------------
+The mood is tranquil and reflective, likely intended to capture the beauty of the stadium at sunset. It may be used to evoke feelings of calmness or to promote the venue.
+
+Category tags
+-----------------
+stadium, sunset, running-track, bleachers, outdoor, evening, sports

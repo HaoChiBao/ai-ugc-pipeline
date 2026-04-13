@@ -1,7 +1,11 @@
 "use client";
 
 import { useCallback, useRef } from "react";
-import type { ImageCanvasItem } from "@/lib/canvas/types";
+import type {
+  CanvasItem,
+  CanvasItemPatch,
+  ImageCanvasItem,
+} from "@/lib/canvas/types";
 import { cn } from "@/lib/utils";
 
 const MIN_SIZE = 32;
@@ -12,24 +16,31 @@ type ToWorld = (clientX: number, clientY: number) => { x: number; y: number };
 
 type CanvasImageItemProps = {
   item: ImageCanvasItem;
+  items: CanvasItem[];
+  selectedIds: string[];
   isSelected: boolean;
   toWorld: ToWorld;
-  onSelect: () => void;
-  onUpdate: (
-    patch: Partial<Pick<ImageCanvasItem, "x" | "y" | "width" | "height">>,
-  ) => void;
+  onSelect: (additive: boolean) => void;
+  onUpdateItem: (id: string, patch: CanvasItemPatch) => void;
 };
 
 export function CanvasImageItem({
   item,
+  items,
+  selectedIds,
   isSelected,
   toWorld,
   onSelect,
-  onUpdate,
+  onUpdateItem,
 }: CanvasImageItemProps) {
   const dragRef = useRef<{
     startItem: { x: number; y: number; w: number; h: number };
     startWorld: { x: number; y: number };
+  } | null>(null);
+
+  const groupDragRef = useRef<{
+    startWorld: { x: number; y: number };
+    initialById: Map<string, { x: number; y: number }>;
   } | null>(null);
 
   const resizeRef = useRef<{
@@ -42,34 +53,76 @@ export function CanvasImageItem({
     (e: React.PointerEvent) => {
       if (e.button !== 0) return;
       e.stopPropagation();
-      onSelect();
+      /** Figma-like: Shift+click toggles; Ctrl/Cmd+click also supported */
+      const additive =
+        e.shiftKey || e.ctrlKey || e.metaKey;
+      if (additive) {
+        e.preventDefault();
+        onSelect(true);
+        return;
+      }
+      onSelect(false);
       const w = toWorld(e.clientX, e.clientY);
-      dragRef.current = {
-        startItem: { x: item.x, y: item.y, w: item.width, h: item.height },
-        startWorld: w,
-      };
+      const group =
+        selectedIds.includes(item.id) && selectedIds.length > 1;
+      if (group) {
+        const initialById = new Map<string, { x: number; y: number }>();
+        for (const id of selectedIds) {
+          const it = items.find((i) => i.id === id);
+          if (it) {
+            initialById.set(id, { x: it.x, y: it.y });
+          }
+        }
+        groupDragRef.current = { startWorld: w, initialById };
+      } else {
+        dragRef.current = {
+          startItem: { x: item.x, y: item.y, w: item.width, h: item.height },
+          startWorld: w,
+        };
+      }
       (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
     },
-    [item.height, item.width, item.x, item.y, onSelect, toWorld],
+    [
+      item.height,
+      item.width,
+      item.x,
+      item.y,
+      item.id,
+      items,
+      onSelect,
+      selectedIds,
+      toWorld,
+    ],
   );
 
   const onBodyPointerMove = useCallback(
     (e: React.PointerEvent) => {
+      const g = groupDragRef.current;
+      if (g) {
+        const w = toWorld(e.clientX, e.clientY);
+        const dx = w.x - g.startWorld.x;
+        const dy = w.y - g.startWorld.y;
+        for (const [id, pos] of g.initialById) {
+          onUpdateItem(id, { x: pos.x + dx, y: pos.y + dy });
+        }
+        return;
+      }
       const d = dragRef.current;
       if (!d) return;
       const w = toWorld(e.clientX, e.clientY);
       const dx = w.x - d.startWorld.x;
       const dy = w.y - d.startWorld.y;
-      onUpdate({
+      onUpdateItem(item.id, {
         x: d.startItem.x + dx,
         y: d.startItem.y + dy,
       });
     },
-    [onUpdate, toWorld],
+    [item.id, onUpdateItem, toWorld],
   );
 
   const onBodyPointerUp = useCallback((e: React.PointerEvent) => {
     dragRef.current = null;
+    groupDragRef.current = null;
     try {
       (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
     } catch {
@@ -81,7 +134,6 @@ export function CanvasImageItem({
     (corner: Corner) => (e: React.PointerEvent) => {
       e.stopPropagation();
       e.preventDefault();
-      onSelect();
       const w = toWorld(e.clientX, e.clientY);
       resizeRef.current = {
         corner,
@@ -90,7 +142,7 @@ export function CanvasImageItem({
       };
       (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
     },
-    [item.height, item.width, item.x, item.y, onSelect, toWorld],
+    [item.height, item.width, item.x, item.y, toWorld],
   );
 
   const onResizePointerMove = useCallback(
@@ -135,9 +187,9 @@ export function CanvasImageItem({
           break;
       }
 
-      onUpdate({ x: nx, y: ny, width: nw, height: nh });
+      onUpdateItem(item.id, { x: nx, y: ny, width: nw, height: nh });
     },
-    [onUpdate, toWorld],
+    [item.id, onUpdateItem, toWorld],
   );
 
   const onResizePointerUp = useCallback((e: React.PointerEvent) => {

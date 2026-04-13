@@ -1,0 +1,39 @@
+Primary category
+--------------------
+landscape
+
+Secondary category
+----------------------
+urban
+
+Scene summary
+-----------------
+The image shows two people jogging along a curved path beside a body of water. The water reflects the silhouette of a large building, likely a government or historical structure. Trees with autumn foliage line the path, indicating a park-like setting.
+
+Subjects & objects
+----------------------
+Two joggers, a curved path, a body of water, trees, a building reflection.
+
+Fine details
+----------------
+The texture of the path is slightly rough with scattered leaves. The reflection in the water is slightly blurred. The image has a grainy texture, possibly due to low light conditions.
+
+Composition & camera
+------------------------
+The image is taken from an elevated angle, capturing a wide view of the scene. The joggers are positioned along the lower third, following the rule of thirds. The path creates a leading line that guides the eye through the image.
+
+Lighting & color
+--------------------
+The lighting is soft and diffused, likely from an overcast sky or during twilight. The color palette is warm with muted greens, browns, and oranges, suggesting an autumn setting.
+
+On-screen text
+------------------
+(none)
+
+Mood & intent
+-----------------
+The mood is calm and serene, capturing a moment of leisure and exercise in an urban park setting. The image likely aims to convey a sense of tranquility and the beauty of nature within a city.
+
+Category tags
+-----------------
+outdoor, jogging, autumn, reflection, park, urban, water, trees, path

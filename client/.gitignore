@@ -24,6 +24,9 @@
 .DS_Store
 *.pem
 
+# local file storage (LOCAL_STORAGE_ROOT)
+.local-storage/
+
 # debug
 npm-debug.log*
 yarn-debug.log*

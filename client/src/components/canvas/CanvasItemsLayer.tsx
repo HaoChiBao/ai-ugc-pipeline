@@ -8,19 +8,20 @@ type ToWorld = (clientX: number, clientY: number) => { x: number; y: number };
 
 type CanvasItemsLayerProps = {
   items: CanvasItem[];
-  selectedId: string | null;
+  selectedIds: string[];
   toWorld: ToWorld;
-  onSelect: (id: string | null) => void;
+  onSelectItem: (id: string, additive: boolean) => void;
   onUpdateItem: (id: string, patch: CanvasItemPatch) => void;
 };
 
 export function CanvasItemsLayer({
   items,
-  selectedId,
+  selectedIds,
   toWorld,
-  onSelect,
+  onSelectItem,
   onUpdateItem,
 }: CanvasItemsLayerProps) {
+  const selectedSet = new Set(selectedIds);
   return (
     <>
       {items.map((item) => {
@@ -29,10 +30,12 @@ export function CanvasItemsLayer({
             <CanvasImageItem
               key={item.id}
               item={item}
-              isSelected={selectedId === item.id}
+              items={items}
+              selectedIds={selectedIds}
+              isSelected={selectedSet.has(item.id)}
               toWorld={toWorld}
-              onSelect={() => onSelect(item.id)}
-              onUpdate={(patch) => onUpdateItem(item.id, patch)}
+              onSelect={(additive) => onSelectItem(item.id, additive)}
+              onUpdateItem={onUpdateItem}
             />
           );
         }
@@ -41,10 +44,12 @@ export function CanvasItemsLayer({
             <CanvasTikTokItem
               key={item.id}
               item={item}
-              isSelected={selectedId === item.id}
+              items={items}
+              selectedIds={selectedIds}
+              isSelected={selectedSet.has(item.id)}
               toWorld={toWorld}
-              onSelect={() => onSelect(item.id)}
-              onUpdate={(patch) => onUpdateItem(item.id, patch)}
+              onSelect={(additive) => onSelectItem(item.id, additive)}
+              onUpdateItem={onUpdateItem}
             />
           );
         }

@@ -1,0 +1,39 @@
+Primary category
+--------------------
+UGC
+
+Secondary category
+----------------------
+fitness
+
+Scene summary
+-----------------
+The image shows a person jogging on a paved path in a park. The individual is wearing athletic clothing and running shoes. The path is surrounded by green grass and trees, indicating a natural setting.
+
+Subjects & objects
+----------------------
+The main subject is a person running. Notable objects include the paved path, trees, and grass.
+
+Fine details
+----------------
+The texture of the running shoes and the pattern on the path are visible. There are shadows on the path and subtle highlights on the person's clothing.
+
+Composition & camera
+------------------------
+The image is taken from a slightly low angle, capturing the runner from behind. The composition uses the rule of thirds, with the path leading into the distance, creating depth.
+
+Lighting & color
+--------------------
+The lighting is natural, likely from the sun, casting soft shadows. The color palette includes greens from the grass and trees, and blues from the sky and shoes.
+
+On-screen text
+------------------
+(none)
+
+Mood & intent
+-----------------
+The mood is energetic and active, likely intended to inspire or document a fitness activity.
+
+Category tags
+-----------------
+outdoor, running, fitness, park, exercise, jogging, nature

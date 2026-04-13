@@ -13,6 +13,13 @@ export type ImageCanvasItem = CanvasItemBase & {
   type: "image";
   /** `blob:` object URL; revoke when removing the item */
   src: string;
+  /** Server-side canvas asset id after upload to Supabase */
+  canvasAssetId?: string;
+  storagePath?: string;
+  publicUrl?: string;
+  mimeType?: string;
+  label?: string;
+  note?: string;
 };
 
 export type TikTokPreviewStatus = "loading" | "ready" | "error";
@@ -35,6 +42,12 @@ export type CanvasItemPatch = Partial<
 > &
   Partial<{
     src: string;
+    canvasAssetId: string;
+    storagePath: string;
+    publicUrl: string;
+    mimeType: string;
+    label: string;
+    note: string;
     url: string;
     title: string;
     thumbnailUrl: string | null;

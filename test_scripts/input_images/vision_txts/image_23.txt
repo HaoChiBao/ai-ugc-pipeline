@@ -1,0 +1,39 @@
+Primary category
+--------------------
+landscape
+
+Secondary category
+----------------------
+nature
+
+Scene summary
+-----------------
+The image shows a tree-lined pathway in a park. The path is paved with red material and is surrounded by lush green trees and foliage. Sunlight filters through the leaves, creating dappled shadows on the path.
+
+Subjects & objects
+----------------------
+Main subjects include the pathway, trees, and greenery. Notable objects are the shadows cast by the trees and the path markings.
+
+Fine details
+----------------
+The texture of the pathway is slightly rough, with visible small pebbles. There are faint path markings, possibly indicating lanes or directions. The foliage has a variety of green shades, and there are subtle shadows on the path.
+
+Composition & camera
+------------------------
+The image is taken from a central, eye-level perspective, creating a symmetrical composition with the path leading into the distance. The framing uses the rule of thirds, with the path centered and trees forming a natural arch.
+
+Lighting & color
+--------------------
+The lighting is natural, with sunlight coming from above, casting soft shadows. The color palette is dominated by greens and earthy reds, with a balanced white balance.
+
+On-screen text
+------------------
+100M
+
+Mood & intent
+-----------------
+The mood is serene and inviting, likely intended to showcase the beauty of nature and encourage outdoor activity or relaxation.
+
+Category tags
+-----------------
+outdoor, nature, park, pathway, trees, greenery, sunlight, shadows

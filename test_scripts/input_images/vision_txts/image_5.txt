@@ -1,0 +1,39 @@
+Primary category
+--------------------
+selfie
+
+Secondary category
+----------------------
+outdoor
+
+Scene summary
+-----------------
+The image shows a person taking a selfie while jogging on a paved path in a park. The individual is wearing headphones and athletic wear, with trees and greenery in the background. The path is marked with blue lines.
+
+Subjects & objects
+----------------------
+Person, headphones, athletic wear, paved path, trees, greenery.
+
+Fine details
+----------------
+Texture of the pavement, slight shadow of the person on the ground, subtle reflections on the headphones, slight motion blur on the arm.
+
+Composition & camera
+------------------------
+The image is taken from a first-person perspective with an extended arm holding the camera. The angle is slightly tilted, capturing both the subject and the background. The composition uses the rule of thirds with the person off-center.
+
+Lighting & color
+--------------------
+Bright natural lighting with sunlight casting shadows. The color palette is vibrant with greens from the trees and blue from the path markings. The white balance is warm, enhancing the sunny atmosphere.
+
+On-screen text
+------------------
+(none)
+
+Mood & intent
+-----------------
+The mood is energetic and active, likely intended to capture a moment of exercise and enjoyment in nature.
+
+Category tags
+-----------------
+outdoor, selfie, jogging, exercise, headphones, nature, sunny, athletic

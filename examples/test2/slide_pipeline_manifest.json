@@ -1,0 +1,166 @@
+{
+  "created_at": "2026-04-07T20:21:46.242391+00:00",
+  "user_prompt": "want to run longer here are a few brain hacks",
+  "openai_plan": {
+    "theme_title": "Brain Hacks to Run Longer",
+    "theme_description": "You can push past limits with simple mindset tricks. Here are quick brain hacks to help you run further today",
+    "num_slides": 6,
+    "slides": [
+      {
+        "caption": "Want to run longer? Try these brain hacks next time you hit the pavement",
+        "shot_direction": "Wide shot of an empty running trail early morning, soft light, no runner in frame"
+      },
+      {
+        "caption": "1. Break your run into small mental checkpoints, not miles",
+        "shot_direction": "Close-up of a runner\u2019s wristwatch and hand tapping it, sunlight glinting off the watch"
+      },
+      {
+        "caption": "2. Use positive self-talk to silence doubts before they start",
+        "shot_direction": "Mid-shot of a runner pausing, eyes closed, breathing deeply, hands on hips"
+      },
+      {
+        "caption": "3. Focus on your breath, not the distance, to stay present and calm",
+        "shot_direction": "POV shot showing runner\u2019s feet hitting the pavement steadily, ground texture visible"
+      },
+      {
+        "caption": "4. Visualize the finish line like you already crossed it",
+        "shot_direction": "Blurred finish line banner in the distance, shot from behind a runner approaching"
+      },
+      {
+        "caption": "Your brain is your best running coach, trust it and keep going",
+        "shot_direction": "Hero shot of the runner smiling, catching breath on the trail, scenic background"
+      }
+    ]
+  },
+  "reference_images": [
+    "C:\\Users\\james\\OneDrive\\Documents\\Github\\ai-ugc-pipeline\\test_scripts\\input_images\\image_12.jpg",
+    "C:\\Users\\james\\OneDrive\\Documents\\Github\\ai-ugc-pipeline\\test_scripts\\input_images\\image_11.jpg",
+    "C:\\Users\\james\\OneDrive\\Documents\\Github\\ai-ugc-pipeline\\test_scripts\\input_images\\image_18.jpg"
+  ],
+  "caption_style": "stroke",
+  "stroke_drop_shadow": false,
+  "finished_slides": [
+    {
+      "index": 1,
+      "caption": "Want to run longer? Try these brain hacks next time you hit the pavement",
+      "shot_direction": "Wide shot of an empty running trail early morning, soft light, no runner in frame",
+      "finished": "C:\\Users\\james\\OneDrive\\Documents\\Github\\ai-ugc-pipeline\\test_scripts\\finished_slides\\slide_01.png",
+      "raw_generated": null,
+      "text_style": {
+        "vertical_anchor": "bottom",
+        "horizontal_anchor": "center",
+        "margin_x_ratio": 0.05072289695410719,
+        "margin_y_ratio": 0.12416822295780325,
+        "shift_x_ratio": 0.0,
+        "shift_y_ratio": 0.08905993795712747,
+        "font_size_ratio": 0.048,
+        "max_width_ratio": 0.88,
+        "vertical_safe_margin_ratio": 0.1,
+        "shadow": false
+      }
+    },
+    {
+      "index": 2,
+      "caption": "1. Break your run into small mental checkpoints, not miles",
+      "shot_direction": "Close-up of a runner\u2019s wristwatch and hand tapping it, sunlight glinting off the watch",
+      "finished": "C:\\Users\\james\\OneDrive\\Documents\\Github\\ai-ugc-pipeline\\test_scripts\\finished_slides\\slide_02.png",
+      "raw_generated": null,
+      "text_style": {
+        "vertical_anchor": "bottom",
+        "horizontal_anchor": "center",
+        "margin_x_ratio": 0.058966557574111005,
+        "margin_y_ratio": 0.13093407420358477,
+        "shift_x_ratio": 0.0,
+        "shift_y_ratio": 0.023619302341164744,
+        "font_size_ratio": 0.048,
+        "max_width_ratio": 0.88,
+        "vertical_safe_margin_ratio": 0.1,
+        "shadow": false
+      }
+    },
+    {
+      "index": 3,
+      "caption": "2. Use positive self-talk to silence doubts before they start",
+      "shot_direction": "Mid-shot of a runner pausing, eyes closed, breathing deeply, hands on hips",
+      "finished": "C:\\Users\\james\\OneDrive\\Documents\\Github\\ai-ugc-pipeline\\test_scripts\\finished_slides\\slide_03.png",
+      "raw_generated": null,
+      "text_style": {
+        "vertical_anchor": "top",
+        "horizontal_anchor": "center",
+        "margin_x_ratio": 0.05349327130474062,
+        "margin_y_ratio": 0.12259376685115433,
+        "shift_x_ratio": 0.0,
+        "shift_y_ratio": -0.12629547647787523,
+        "font_size_ratio": 0.048,
+        "max_width_ratio": 0.88,
+        "vertical_safe_margin_ratio": 0.1,
+        "shadow": false
+      }
+    },
+    {
+      "index": 4,
+      "caption": "3. Focus on your breath, not the distance, to stay present and calm",
+      "shot_direction": "POV shot showing runner\u2019s feet hitting the pavement steadily, ground texture visible",
+      "finished": "C:\\Users\\james\\OneDrive\\Documents\\Github\\ai-ugc-pipeline\\test_scripts\\finished_slides\\slide_04.png",
+      "raw_generated": null,
+      "text_style": {
+        "vertical_anchor": "bottom",
+        "horizontal_anchor": "center",
+        "margin_x_ratio": 0.07965135304585458,
+        "margin_y_ratio": 0.14609363278930784,
+        "shift_x_ratio": 0.0,
+        "shift_y_ratio": -0.019115423511001844,
+        "font_size_ratio": 0.048,
+        "max_width_ratio": 0.88,
+        "vertical_safe_margin_ratio": 0.1,
+        "shadow": false
+      }
+    },
+    {
+      "index": 5,
+      "caption": "4. Visualize the finish line like you already crossed it",
+      "shot_direction": "Blurred finish line banner in the distance, shot from behind a runner approaching",
+      "finished": "C:\\Users\\james\\OneDrive\\Documents\\Github\\ai-ugc-pipeline\\test_scripts\\finished_slides\\slide_05.png",
+      "raw_generated": null,
+      "text_style": {
+        "vertical_anchor": "bottom",
+        "horizontal_anchor": "center",
+        "margin_x_ratio": 0.054241156844582666,
+        "margin_y_ratio": 0.14757112495671332,
+        "shift_x_ratio": 0.0,
+        "shift_y_ratio": 0.1357177819422191,
+        "font_size_ratio": 0.048,
+        "max_width_ratio": 0.88,
+        "vertical_safe_margin_ratio": 0.1,
+        "shadow": false
+      }
+    },
+    {
+      "index": 6,
+      "caption": "Your brain is your best running coach, trust it and keep going",
+      "shot_direction": "Hero shot of the runner smiling, catching breath on the trail, scenic background",
+      "finished": "C:\\Users\\james\\OneDrive\\Documents\\Github\\ai-ugc-pipeline\\test_scripts\\finished_slides\\slide_06.png",
+      "raw_generated": null,
+      "text_style": {
+        "vertical_anchor": "top",
+        "horizontal_anchor": "center",
+        "margin_x_ratio": 0.05039023363232602,
+        "margin_y_ratio": 0.10940099706375095,
+        "shift_x_ratio": 0.0,
+        "shift_y_ratio": 0.06106859986277843,
+        "font_size_ratio": 0.048,
+        "max_width_ratio": 0.88,
+        "vertical_safe_margin_ratio": 0.1,
+        "shadow": false
+      }
+    }
+  ],
+  "supported_input_extensions": [
+    ".bmp",
+    ".gif",
+    ".jpeg",
+    ".jpg",
+    ".png",
+    ".webp"
+  ]
+}
