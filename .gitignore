@@ -9,6 +9,9 @@ test_scripts/tiktok_slideshow_analysis/
 # Pinterest search downloads (download_pinterest_search.py)
 test_scripts/pinterest_downloads/
 
+# FastAPI test_scripts job output (api_server)
+test_scripts/api_runs/
+
 # Local TikTok/download experiments (long Windows paths, not for repo)
 test_scripts/_dltest/
 

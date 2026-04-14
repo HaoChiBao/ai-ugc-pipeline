@@ -163,6 +163,11 @@ def build_parser(prog: str | None = None) -> argparse.ArgumentParser:
         action="store_true",
         help="With --caption-style label: keep original letter casing (default: lowercase for label style).",
     )
+    parser.add_argument(
+        "--no-text-overlay",
+        action="store_true",
+        help="Skip burning captions into pixels; still writes slide PNGs (raw photos) and caption_manifest.json.",
+    )
     return parser
 
 
@@ -250,7 +255,9 @@ def main(argv: list[str] | None = None, *, prog: str | None = None) -> int:
     for i, (src_path, caption) in enumerate(zip(picked, captions), start=1):
         img = PILImage.open(src_path).convert("RGB")
         style = styles[i - 1]
-        if args.caption_style == "label":
+        if args.no_text_overlay:
+            out_img = img
+        elif args.caption_style == "label":
             out_img = draw_tiktok_label_text(
                 img,
                 caption,
@@ -279,6 +286,7 @@ def main(argv: list[str] | None = None, *, prog: str | None = None) -> int:
         "prompt": args.prompt,
         "provider": args.provider,
         "caption_style": args.caption_style,
+        "text_overlay": not args.no_text_overlay,
         "label_lowercase": label_lowercase if args.caption_style == "label" else None,
         "theme_title": plan.theme_title,
         "theme_description": plan.theme_description,

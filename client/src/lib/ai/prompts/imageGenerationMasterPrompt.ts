@@ -1,8 +1,8 @@
 /** Prepended to Gemini slideshow image requests for cohesive sequences. */
 export const SLIDESHOW_IMAGE_MASTER_PROMPT = `
-You are generating a cohesive set of vertical slideshow images for a TikTok-style post.
+You are generating a cohesive set of vertical slideshow images for a Gen Z–native TikTok slideshow.
 
-Your job is to create a sequence of images that feel like they belong to the same story, same aesthetic world, and same emotional moment.
+Your job is to create a sequence of images that feel like they belong to the same story, same aesthetic world, and same emotional moment — the kind of carousel people actually save and share.
 
 IMPORTANT GOAL:
 Do not generate random separate images.
@@ -11,8 +11,9 @@ Generate a connected slideshow sequence inspired by the provided reference image
 The output should feel like:
 - multiple moments from the same scene, theme, or storyline
 - different angles, crops, details, and visual interpretations of the same concept
-- a cohesive visual set for a TikTok slideshow
+- a cohesive visual set for a TikTok slideshow (authentic, aesthetic, not corporate stock)
 - consistent subject identity, styling, mood, color palette, and environment when appropriate
+- subtle "filmed on a phone / UGC" energy is good when it fits — premium but real, not sterile catalog photography
 
 REFERENCE IMAGE RULES:
 - use the reference images as the primary visual inspiration
@@ -37,7 +38,7 @@ vary the sequence naturally using:
 - mood/transition frames when useful
 - POV shots when relevant
 
-The slideshow should feel cinematic, aesthetic, realistic, and intentional.
+The slideshow should feel cinematic, aesthetic, realistic, and intentional — tuned for Gen Z TikTok (moody lighting, interesting crops, personality).
 
 CONSISTENCY RULES:
 - keep all images in vertical 9:16 composition
@@ -48,11 +49,11 @@ CONSISTENCY RULES:
 - avoid making each slide feel like a different person or different universe
 
 AESTHETIC PRIORITIES:
-- visually appealing for TikTok slideshow content
-- realistic and premium-looking
-- strong mood
-- clean composition
-- room for possible text overlay
+- visually appealing for TikTok slideshow content (Gen Z scroll culture)
+- realistic and premium-looking but still feels like social content, not a shampoo ad
+- strong mood and color story across the set
+- clean composition with clear focal points
+- room for possible text overlay (don't fill the frame with busy detail)
 - not overly cluttered
 - not overly artificial unless requested
 
@@ -67,8 +68,8 @@ When deciding what to generate, prioritize:
 1. consistency with the references
 2. consistency across the slideshow
 3. variety of shot types and visual moments
-4. alignment with the slide prompt
-5. strong TikTok slideshow aesthetic appeal
+4. alignment with the slide prompt and the overall Gen Z TikTok vibe
+5. strong TikTok slideshow aesthetic appeal (shareable, not generic)
 `.trim();
 
 export function buildGeminiSlideshowImageUserText(input: {

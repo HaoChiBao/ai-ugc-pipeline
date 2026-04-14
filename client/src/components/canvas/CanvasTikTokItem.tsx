@@ -1,14 +1,16 @@
 "use client";
 
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import type {
   CanvasItem,
   CanvasItemPatch,
   TikTokCanvasItem,
 } from "@/lib/canvas/types";
+import { Button } from "@/components/ui/button";
 import { compactUrlDisplay } from "@/lib/url-nodes/formatUrl";
 import { cn } from "@/lib/utils";
-import { ExternalLink, Loader2 } from "lucide-react";
+import { ExternalLink, Loader2, MoreHorizontal } from "lucide-react";
 
 const MIN_W = 200;
 const MIN_H = 140;
@@ -36,6 +38,7 @@ export function CanvasTikTokItem({
   onSelect,
   onUpdateItem,
 }: CanvasTikTokItemProps) {
+  const [contextOpen, setContextOpen] = useState(false);
   const dragRef = useRef<{
     startItem: { x: number; y: number; w: number; h: number };
     startWorld: { x: number; y: number };
@@ -219,6 +222,20 @@ export function CanvasTikTokItem({
 
   const compact = compactUrlDisplay(item.url);
 
+  const analysisBusy = item.analysisStatus === "loading";
+  const analysisDone =
+    item.analysisStatus === "ready" || item.analysisStatus === "error";
+  const showContextMenu = analysisBusy || analysisDone;
+
+  useEffect(() => {
+    if (!contextOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setContextOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [contextOpen]);
+
   return (
     <div
       className={cn(
@@ -232,6 +249,7 @@ export function CanvasTikTokItem({
         width: item.width,
         height: item.height,
         touchAction: "none",
+        zIndex: (item.stackPriority ?? 0) * 10_000 + 2,
       }}
       data-canvas-item={item.id}
     >
@@ -244,6 +262,35 @@ export function CanvasTikTokItem({
         onPointerCancel={onBodyPointerUp}
       >
         <div className="relative h-[45%] min-h-[72px] shrink-0 bg-muted/40">
+          {showContextMenu ? (
+            <Button
+              type="button"
+              size="icon"
+              variant="secondary"
+              title={
+                analysisBusy
+                  ? "Extracting context…"
+                  : "View extracted TikTok context"
+              }
+              className="pointer-events-auto absolute right-1.5 top-1.5 z-20 size-8 rounded-full border border-border/80 bg-background/95 shadow-md"
+              onPointerDown={(e) => e.stopPropagation()}
+              onClick={(e) => {
+                e.stopPropagation();
+                setContextOpen(true);
+              }}
+            >
+              {analysisBusy ? (
+                <Loader2 className="size-4 animate-spin" aria-hidden />
+              ) : (
+                <MoreHorizontal className="size-4" aria-hidden />
+              )}
+              <span className="sr-only">
+                {analysisBusy
+                  ? "Extracting TikTok context"
+                  : "Open TikTok context"}
+              </span>
+            </Button>
+          ) : null}
           {item.previewStatus === "loading" && (
             <div className="flex h-full w-full items-center justify-center">
               <Loader2 className="size-8 animate-spin text-muted-foreground" aria-hidden />
@@ -271,6 +318,62 @@ export function CanvasTikTokItem({
             </div>
           )}
         </div>
+
+        {contextOpen &&
+          typeof document !== "undefined" &&
+          createPortal(
+            <>
+              <div
+                className="fixed inset-0 z-[500] bg-black/50"
+                aria-hidden
+                onPointerDown={() => setContextOpen(false)}
+              />
+              <div
+                role="dialog"
+                aria-modal
+                aria-labelledby={`tiktok-ctx-${item.id}`}
+                className="fixed left-1/2 top-1/2 z-[501] flex max-h-[min(72vh,540px)] w-[min(440px,92vw)] -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-lg border border-border bg-background shadow-xl"
+                onPointerDown={(e) => e.stopPropagation()}
+              >
+                <div className="flex items-center justify-between gap-2 border-b border-border px-3 py-2">
+                  <p
+                    id={`tiktok-ctx-${item.id}`}
+                    className="text-xs font-semibold text-foreground"
+                  >
+                    TikTok context
+                  </p>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="h-7 text-xs"
+                    onClick={() => setContextOpen(false)}
+                  >
+                    Close
+                  </Button>
+                </div>
+                <div className="min-h-0 flex-1 overflow-y-auto p-3">
+                  {item.analysisStatus === "loading" ? (
+                    <p className="flex items-center gap-2 text-xs text-muted-foreground">
+                      <Loader2 className="size-4 animate-spin shrink-0" />
+                      Extracting features and context…
+                    </p>
+                  ) : item.analysisStatus === "error" ? (
+                    <p className="text-xs text-destructive">
+                      {item.analysisError?.trim() ||
+                        "Context extraction failed."}
+                    </p>
+                  ) : (
+                    <pre className="whitespace-pre-wrap font-sans text-[11px] leading-relaxed text-foreground">
+                      {item.analysisContextText?.trim() ||
+                        "No context text was returned."}
+                    </pre>
+                  )}
+                </div>
+              </div>
+            </>,
+            document.body,
+          )}
 
         <div className="flex min-h-0 flex-1 flex-col gap-1 p-2 pt-2">
           <p className="line-clamp-2 text-left text-xs font-medium leading-snug">

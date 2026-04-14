@@ -2,10 +2,14 @@
 
 import { useEffect } from "react";
 import { readClipboardImageBlob } from "@/lib/canvas/files";
+import { extractPinterestPinUrlFromClipboard } from "@/lib/url-nodes/pinterest/extractPinterestFromClipboard";
 
 type Options = {
   enabled?: boolean;
-  onImageBlob: (blob: Blob) => void;
+  onImageBlob: (
+    blob: Blob,
+    meta?: { pinterestPinUrl?: string | null },
+  ) => void;
   /** Plain text when there is no image (e.g. URLs). */
   onPlainText?: (text: string) => void;
   onNonImagePaste?: () => void;
@@ -24,7 +28,12 @@ export function useCanvasPaste({
       const blob = readClipboardImageBlob(e.clipboardData);
       if (blob) {
         e.preventDefault();
-        onImageBlob(blob);
+        const pinterestPinUrl = extractPinterestPinUrlFromClipboard(
+          e.clipboardData,
+        );
+        onImageBlob(blob, {
+          pinterestPinUrl: pinterestPinUrl ?? undefined,
+        });
         return;
       }
 

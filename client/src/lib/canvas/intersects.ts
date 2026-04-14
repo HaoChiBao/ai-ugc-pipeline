@@ -1,4 +1,11 @@
-import type { CanvasItem } from "@/lib/canvas/types";
+import type { CanvasItem, TextCanvasItem } from "@/lib/canvas/types";
+
+function isAttachedCaption(item: CanvasItem): item is TextCanvasItem {
+  return (
+    item.type === "text" &&
+    Boolean(item.attachedToImageId || item.attachedToPinterestItemId)
+  );
+}
 
 /** Axis-aligned rectangle intersection in world (canvas) space. */
 export function worldRectsIntersect(
@@ -21,5 +28,8 @@ export function itemIntersectsWorldRect(
   rw: number,
   rh: number,
 ): boolean {
+  if (isAttachedCaption(item)) {
+    return false;
+  }
   return worldRectsIntersect(rx, ry, rw, rh, item.x, item.y, item.width, item.height);
 }

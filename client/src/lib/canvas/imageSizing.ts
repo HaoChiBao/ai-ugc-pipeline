@@ -17,3 +17,24 @@ export function computeInitialImageSize(
   const height = Math.round((naturalHeight * width) / naturalWidth);
   return { width, height };
 }
+
+/**
+ * Pinterest oEmbed thumbnails are often much smaller than full pins. Similar images from
+ * gallery-dl use {@link computeInitialImageSize} and usually end up `maxWidth` wide. This
+ * scales **up** small thumbnails to `maxWidth` so the pin frame matches that visual size.
+ */
+export function computePinterestThumbnailFrameSize(
+  naturalWidth: number,
+  naturalHeight: number,
+  maxWidth: number = MAX_INITIAL_IMAGE_WIDTH,
+): { width: number; height: number } {
+  if (naturalWidth <= 0 || naturalHeight <= 0) {
+    return { width: maxWidth, height: maxWidth };
+  }
+  if (naturalWidth >= maxWidth) {
+    return computeInitialImageSize(naturalWidth, naturalHeight, maxWidth);
+  }
+  const width = maxWidth;
+  const height = Math.round((naturalHeight * maxWidth) / naturalWidth);
+  return { width, height };
+}

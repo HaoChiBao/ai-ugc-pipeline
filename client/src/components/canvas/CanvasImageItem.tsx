@@ -1,18 +1,53 @@
 "use client";
 
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { flushSync } from "react-dom";
 import type {
+  CanvasGroup,
   CanvasItem,
   CanvasItemPatch,
   ImageCanvasItem,
+  PinterestSimilarRequest,
+  TextCanvasItem,
 } from "@/lib/canvas/types";
+import { resolveCanvasImageObjectFit } from "@/lib/canvas/canvasImageObjectFit";
+import type { EffectiveItemLayout } from "@/lib/canvas/groupLayout";
 import { cn } from "@/lib/utils";
+import { Pencil } from "lucide-react";
+import { AttachedCaptionPreview } from "./AttachedCaptionPreview";
+import { PinterestHoverChrome } from "./PinterestHoverChrome";
+import { SimilarOnlyChrome } from "./SimilarOnlyChrome";
 
 const MIN_SIZE = 32;
 
 type Corner = "nw" | "ne" | "sw" | "se";
 
 type ToWorld = (clientX: number, clientY: number) => { x: number; y: number };
+
+const COLLAPSED_CLICK_DRAG_PX = 6;
+
+type DragMode =
+  | {
+      kind: "item";
+      /** World top-left at drag start (layout override or item model). */
+      startDisplayX: number;
+      startDisplayY: number;
+      startWorld: { x: number; y: number };
+    }
+  | {
+      kind: "collapse";
+      groupId: string;
+      startWorld: { x: number; y: number };
+      startCx: number;
+      startCy: number;
+    }
+  | {
+      kind: "pendingCollapsedOpen";
+      groupId: string;
+      startWorld: { x: number; y: number };
+      startCx: number;
+      startCy: number;
+    };
 
 type CanvasImageItemProps = {
   item: ImageCanvasItem;
@@ -22,6 +57,39 @@ type CanvasImageItemProps = {
   toWorld: ToWorld;
   onSelect: (additive: boolean) => void;
   onUpdateItem: (id: string, patch: CanvasItemPatch) => void;
+  onPinterestSimilar?: (req: PinterestSimilarRequest) => Promise<void>;
+  layoutOverride?: EffectiveItemLayout | null;
+  groupIsCollapsed?: boolean;
+  groupCollapseCenter?: { cx: number; cy: number } | null;
+  onPatchGroup?: (id: string, patch: Partial<CanvasGroup>) => void;
+  onMergeDrop?: (draggedId: string, worldX: number, worldY: number) => void;
+  onOpenGroup?: (groupId: string) => void;
+  /** While dragging this image in world space (single-item drag). */
+  onImageDragWorldMove?: (
+    draggedId: string,
+    worldX: number,
+    worldY: number,
+  ) => void;
+  onImageDragWorldStart?: (draggedId: string) => void;
+  onImageDragWorldEnd?: () => void;
+  /** After a single-image drag; world-space top-left + size at release. */
+  onGroupMemberDragEnd?: (
+    id: string,
+    finalX: number,
+    finalY: number,
+    width: number,
+    height: number,
+  ) => void;
+  /** Open full-screen caption / text editor for this image */
+  onOpenImageTextEditor?: (imageId: string) => void;
+  /** Captions drawn inside this image node (move with drag; not interactable). */
+  attachedCaptions?: TextCanvasItem[];
+  /** Uploads / images without pin: open pin-URL dialog for Similar */
+  onRequestSimilarPinUrl?: (imageId: string) => void;
+  /** Effective world top-left (grid layout) for multi-drag in expanded groups */
+  getImageWorldTopLeft?: (id: string) => { x: number; y: number } | undefined;
+  /** Selected images moving together (expanded group, etc.) */
+  onImageMultiDragStart?: (imageIds: string[]) => void;
 };
 
 export function CanvasImageItem({
@@ -32,11 +100,62 @@ export function CanvasImageItem({
   toWorld,
   onSelect,
   onUpdateItem,
+  onPinterestSimilar,
+  layoutOverride,
+  groupIsCollapsed = false,
+  groupCollapseCenter,
+  onPatchGroup,
+  onMergeDrop,
+  onOpenGroup,
+  onImageDragWorldMove,
+  onImageDragWorldStart,
+  onImageDragWorldEnd,
+  onGroupMemberDragEnd,
+  onOpenImageTextEditor,
+  onRequestSimilarPinUrl,
+  getImageWorldTopLeft,
+  onImageMultiDragStart,
+  attachedCaptions = [],
 }: CanvasImageItemProps) {
-  const dragRef = useRef<{
-    startItem: { x: number; y: number; w: number; h: number };
-    startWorld: { x: number; y: number };
+  const [similarBusy, setSimilarBusy] = useState(false);
+  /** Single-image drag: visual position without patching doc each frame (avoids full-canvas re-renders). */
+  const [liveDragPos, setLiveDragPos] = useState<{
+    x: number;
+    y: number;
   } | null>(null);
+  const dragRef = useRef<DragMode | null>(null);
+  const layoutOverrideRef = useRef(layoutOverride);
+  layoutOverrideRef.current = layoutOverride;
+
+  const mergeMoveRafRef = useRef<number | null>(null);
+  const mergeMovePendingRef = useRef<{
+    id: string;
+    wx: number;
+    wy: number;
+  } | null>(null);
+
+  const scheduleMergeHoverMove = useCallback(
+    (id: string, wx: number, wy: number) => {
+      mergeMovePendingRef.current = { id, wx, wy };
+      if (mergeMoveRafRef.current !== null) return;
+      mergeMoveRafRef.current = requestAnimationFrame(() => {
+        mergeMoveRafRef.current = null;
+        const p = mergeMovePendingRef.current;
+        mergeMovePendingRef.current = null;
+        if (p) onImageDragWorldMove?.(p.id, p.wx, p.wy);
+      });
+    },
+    [onImageDragWorldMove],
+  );
+
+  useEffect(
+    () => () => {
+      if (mergeMoveRafRef.current !== null) {
+        cancelAnimationFrame(mergeMoveRafRef.current);
+      }
+    },
+    [],
+  );
 
   const groupDragRef = useRef<{
     startWorld: { x: number; y: number };
@@ -63,32 +182,75 @@ export function CanvasImageItem({
       }
       onSelect(false);
       const w = toWorld(e.clientX, e.clientY);
-      const group =
+      const multi =
         selectedIds.includes(item.id) && selectedIds.length > 1;
-      if (group) {
+      if (multi) {
         const initialById = new Map<string, { x: number; y: number }>();
+        const stackMemberIds: string[] = [];
         for (const id of selectedIds) {
           const it = items.find((i) => i.id === id);
-          if (it) {
+          if (it?.type === "image" || it?.type === "pinterest") {
+            stackMemberIds.push(id);
+            const p = getImageWorldTopLeft?.(id) ?? { x: it.x, y: it.y };
+            initialById.set(id, p);
+          } else if (it) {
             initialById.set(id, { x: it.x, y: it.y });
           }
         }
         groupDragRef.current = { startWorld: w, initialById };
+        onImageMultiDragStart?.(stackMemberIds);
+      } else if (
+        groupIsCollapsed &&
+        item.groupId &&
+        groupCollapseCenter &&
+        onPatchGroup
+      ) {
+        dragRef.current =
+          onOpenGroup
+            ? {
+                kind: "pendingCollapsedOpen",
+                groupId: item.groupId,
+                startWorld: w,
+                startCx: groupCollapseCenter.cx,
+                startCy: groupCollapseCenter.cy,
+              }
+            : {
+                kind: "collapse",
+                groupId: item.groupId,
+                startWorld: w,
+                startCx: groupCollapseCenter.cx,
+                startCy: groupCollapseCenter.cy,
+              };
       } else {
+        const lo = layoutOverrideRef.current;
+        const sx = lo?.x ?? item.x;
+        const sy = lo?.y ?? item.y;
+        setLiveDragPos({ x: sx, y: sy });
         dragRef.current = {
-          startItem: { x: item.x, y: item.y, w: item.width, h: item.height },
+          kind: "item",
+          startDisplayX: sx,
+          startDisplayY: sy,
           startWorld: w,
         };
+        onImageDragWorldStart?.(item.id);
       }
       (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
     },
     [
+      getImageWorldTopLeft,
+      groupCollapseCenter,
+      groupIsCollapsed,
+      item.groupId,
       item.height,
       item.width,
       item.x,
       item.y,
       item.id,
       items,
+      onImageDragWorldStart,
+      onImageMultiDragStart,
+      onOpenGroup,
+      onPatchGroup,
       onSelect,
       selectedIds,
       toWorld,
@@ -110,25 +272,107 @@ export function CanvasImageItem({
       const d = dragRef.current;
       if (!d) return;
       const w = toWorld(e.clientX, e.clientY);
+      if (d.kind === "pendingCollapsedOpen") {
+        const dist = Math.hypot(w.x - d.startWorld.x, w.y - d.startWorld.y);
+        if (dist > COLLAPSED_CLICK_DRAG_PX) {
+          dragRef.current = {
+            kind: "collapse",
+            groupId: d.groupId,
+            startWorld: w,
+            startCx: d.startCx,
+            startCy: d.startCy,
+          };
+        }
+        return;
+      }
+      if (d.kind === "collapse") {
+        const dx = w.x - d.startWorld.x;
+        const dy = w.y - d.startWorld.y;
+        onPatchGroup?.(d.groupId, {
+          collapseCenterX: d.startCx + dx,
+          collapseCenterY: d.startCy + dy,
+        });
+        return;
+      }
       const dx = w.x - d.startWorld.x;
       const dy = w.y - d.startWorld.y;
-      onUpdateItem(item.id, {
-        x: d.startItem.x + dx,
-        y: d.startItem.y + dy,
+      setLiveDragPos({
+        x: d.startDisplayX + dx,
+        y: d.startDisplayY + dy,
       });
+      scheduleMergeHoverMove(item.id, w.x, w.y);
     },
-    [item.id, onUpdateItem, toWorld],
+    [item.id, onPatchGroup, onUpdateItem, scheduleMergeHoverMove, toWorld],
   );
 
-  const onBodyPointerUp = useCallback((e: React.PointerEvent) => {
-    dragRef.current = null;
-    groupDragRef.current = null;
-    try {
-      (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
-    } catch {
-      /* already released */
-    }
-  }, []);
+  const onBodyPointerUp = useCallback(
+    (e: React.PointerEvent) => {
+      const d = dragRef.current;
+      const hadGroupDrag = Boolean(groupDragRef.current);
+      groupDragRef.current = null;
+      if (mergeMoveRafRef.current !== null) {
+        cancelAnimationFrame(mergeMoveRafRef.current);
+        mergeMoveRafRef.current = null;
+      }
+      mergeMovePendingRef.current = null;
+      if (
+        d?.kind === "pendingCollapsedOpen" &&
+        item.groupId &&
+        onOpenGroup
+      ) {
+        const w = toWorld(e.clientX, e.clientY);
+        const dist = Math.hypot(w.x - d.startWorld.x, w.y - d.startWorld.y);
+        if (dist <= COLLAPSED_CLICK_DRAG_PX) {
+          onOpenGroup(item.groupId);
+        }
+      }
+      dragRef.current = null;
+      // Do not gate on selectedIds here: on pointer down we call onSelect(false),
+      // but this closure still sees pre-render selection — merge would never run
+      // when the user clicked this image to drag it away from another selection.
+      // Multi-drag never sets d.kind === "item" (uses groupDragRef instead).
+      if (d?.kind === "item" && onMergeDrop) {
+        const w = toWorld(e.clientX, e.clientY);
+        const dist = Math.hypot(w.x - d.startWorld.x, w.y - d.startWorld.y);
+        if (dist > 8) {
+          onMergeDrop(item.id, w.x, w.y);
+        }
+      }
+      if (d?.kind === "item") {
+        const cancelled = e.type === "pointercancel";
+        if (!cancelled) {
+          const w = toWorld(e.clientX, e.clientY);
+          const fx = d.startDisplayX + (w.x - d.startWorld.x);
+          const fy = d.startDisplayY + (w.y - d.startWorld.y);
+          flushSync(() => {
+            onUpdateItem(item.id, { x: fx, y: fy });
+          });
+          onGroupMemberDragEnd?.(item.id, fx, fy, item.width, item.height);
+        }
+        setLiveDragPos(null);
+      }
+      if (d?.kind === "item" || hadGroupDrag) {
+        onImageDragWorldEnd?.();
+      }
+      try {
+        (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
+      } catch {
+        /* already released */
+      }
+    },
+    [
+      item.groupId,
+      item.height,
+      item.id,
+      item.width,
+      onGroupMemberDragEnd,
+      onImageDragWorldEnd,
+      onMergeDrop,
+      onOpenGroup,
+      onUpdateItem,
+      toWorld,
+    ],
+  );
 
   const onResizePointerDown = useCallback(
     (corner: Corner) => (e: React.PointerEvent) => {
@@ -215,25 +459,78 @@ export function CanvasImageItem({
     [onBodyPointerMove],
   );
 
+  const similarEnabled = Boolean(onPinterestSimilar);
+  const pinterestFull =
+    Boolean(item.pinterestPinUrl?.trim()) && similarEnabled;
+  const objectFit = resolveCanvasImageObjectFit(item, similarEnabled);
+
+  const handleSimilarClick = useCallback(async () => {
+    if (!onPinterestSimilar || similarBusy) return;
+    const pin = item.pinterestPinUrl?.trim();
+    if (!pin) {
+      onRequestSimilarPinUrl?.(item.id);
+      return;
+    }
+    setSimilarBusy(true);
+    try {
+      const ax = liveDragPos?.x ?? layoutOverride?.x ?? item.x;
+      const ay = liveDragPos?.y ?? layoutOverride?.y ?? item.y;
+      await onPinterestSimilar({
+        pinUrl: pin,
+        sourceImageItemId: item.id,
+        anchor: {
+          x: ax,
+          y: ay,
+          width: item.width,
+          height: item.height,
+        },
+      });
+    } finally {
+      setSimilarBusy(false);
+    }
+  }, [
+    item,
+    layoutOverride,
+    liveDragPos,
+    onPinterestSimilar,
+    onRequestSimilarPinUrl,
+    similarBusy,
+  ]);
+
+  const left = liveDragPos?.x ?? layoutOverride?.x ?? item.x;
+  const top = liveDragPos?.y ?? layoutOverride?.y ?? item.y;
+  const layoutZ = layoutOverride?.zIndex;
+  const zIndex =
+    (item.stackPriority ?? 0) * 10_000 + (layoutZ ?? 2);
+
   return (
     <div
       className={cn(
-        "absolute box-border select-none",
+        "absolute box-border select-none overflow-visible ease-out",
+        liveDragPos
+          ? "duration-0"
+          : "transition-[left,top] duration-200",
         isSelected &&
           "shadow-md ring-2 ring-primary/70 ring-offset-2 ring-offset-background",
       )}
       style={{
-        left: item.x,
-        top: item.y,
+        left,
+        top,
         width: item.width,
         height: item.height,
         touchAction: "none",
+        zIndex,
       }}
       data-canvas-item={item.id}
     >
       <div
         role="presentation"
-        className="relative h-full w-full overflow-hidden rounded-md bg-card"
+        tabIndex={similarEnabled ? 0 : undefined}
+        className={cn(
+          "relative h-full w-full overflow-hidden rounded-md bg-card",
+          similarEnabled &&
+            "group outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-primary/60",
+        )}
         onPointerDown={onBodyPointerDown}
         onPointerMove={handleBodyMove}
         onPointerUp={onBodyPointerUp}
@@ -244,11 +541,55 @@ export function CanvasImageItem({
           src={item.src}
           alt=""
           draggable={false}
-          className="pointer-events-none h-full w-full object-contain"
+          className={cn(
+            "pointer-events-none h-full w-full",
+            objectFit === "cover" ? "object-cover" : "object-contain",
+          )}
         />
+        {pinterestFull ? (
+          <PinterestHoverChrome
+            pinPageUrl={item.pinterestPinUrl!}
+            similarBusy={similarBusy}
+            onSimilar={handleSimilarClick}
+            show
+          />
+        ) : similarEnabled ? (
+          <SimilarOnlyChrome
+            similarBusy={similarBusy}
+            onSimilar={handleSimilarClick}
+            show
+          />
+        ) : null}
+        {isSelected && !groupIsCollapsed && onOpenImageTextEditor ? (
+          <button
+            type="button"
+            className="pointer-events-auto absolute right-1 top-1 z-20 flex size-8 items-center justify-center rounded-md border border-primary/40 bg-background/95 text-foreground shadow-md ring-offset-background transition hover:bg-muted"
+            aria-label="Edit text on image"
+            title="Edit text on image"
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              onOpenImageTextEditor(item.id);
+            }}
+            onPointerDown={(e) => e.stopPropagation()}
+          >
+            <Pencil className="size-4" aria-hidden />
+          </button>
+        ) : null}
       </div>
 
-      {isSelected && (
+      {attachedCaptions.length > 0 ? (
+        <div
+          className="pointer-events-none absolute inset-0 z-[8] overflow-visible"
+          aria-hidden
+        >
+          {attachedCaptions.map((cap) => (
+            <AttachedCaptionPreview key={cap.id} text={cap} />
+          ))}
+        </div>
+      ) : null}
+
+      {isSelected && !groupIsCollapsed && (
         <>
           {(
             [

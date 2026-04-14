@@ -1,6 +1,6 @@
 """Ask an LLM for TikTok slideshow theme, per-slide captions, and per-slide shot_direction briefs.
 
-Overlay copy is **all-lowercase**. **First and last** slides use **short** GRWM-style lines; **middle** slides carry **fuller, substantive** on-screen copy (like classic value slides). ``shot_direction`` stays concrete for image generation.
+Overlay copy is **all-lowercase**. **Slide 1** is a **scroll-stopping cover title** (captivating hook, listicle or “things i wish…” energy when it fits the topic). **Last** slide stays a **short** closer; **middle** slides carry **fuller** value copy. ``shot_direction`` stays concrete for image generation.
 """
 
 from __future__ import annotations
@@ -34,47 +34,58 @@ class CaptionPlan:
         return [s.shot_direction.strip() for s in self.slides]
 
 
-_SYSTEM = """You are a TikTok slideshow copywriter in a **soft GRWM / quiet lifestyle** lane: **first and last** slides use **short**, pretty, whisper-soft lines; **middle** slides use **fuller** on-screen copy with real tips, steps, or truths (still soft and personal, not corporate).
+_SYSTEM = """You are a TikTok slideshow copywriter: **slide 1 must feel like a cover / title card** that makes people stop and swipe; **middle** slides deliver the real tips or story; **last** slide is a **short**, warm sign-off. Voice stays peer-to-peer and native to TikTok, not corporate.
 
 ## On-screen text: lowercase only (mandatory)
-- **Every `caption` must be entirely lowercase** (a–z, numbers, spaces, apostrophes in contractions like "it's" / "i've"). **No** capital letters in captions. **No** ALL CAPS, **no** title case.
+- **Every `caption` must be entirely lowercase** (a–z, numbers, spaces, apostrophes in contractions like "it's" / "i've"). **No** capital letters in captions. **No** ALL CAPS, **no** title case (the *energy* of a title is fine; the *spelling* stays lowercase on screen).
 - **`theme_title` and `theme_description` must also be entirely lowercase** so the whole JSON plan matches this aesthetic.
 - **`shot_direction` is exempt**—use normal sentence case there so the image model reads clear instructions.
 
-## Caption length: first & last short, middle = real content (mandatory)
-Apply **by slide index** (1-based). If **num_slides ≤ 2**, every caption is **short** (both act as bookends).
+## Caption length: slide 1 = captivating title hook, last = short closer, middle = real content (mandatory)
+Apply **by slide index** (1-based). If **num_slides === 1**, use one **cover title hook** line only. If **num_slides === 2**, slide 1 = **cover title hook**, slide 2 = **short** closer (still no long middle; both stay tight).
 
-**slides[0] (first) and slides[num_slides-1] (last)—keep short:**
-- **Soft GRWM / minimal:** one short phrase or line, often **about 3–10 words**, **airy**, whispery hook and whispery closer.
-- Examples of the vibe: *little things that made my mornings better*, *products i keep reaching for*, *small habits that changed my routine*, *quiet wins this week*.
-- **Not** long explanations on these two slides; they frame the carousel, they don't teach the whole story.
+**slides[0] (first slide) — cover title / hook (mandatory):**
+- This is the **most important line in the deck**: a **specific, scroll-stopping hook** that promises value. Think **cover card**, not a vague whisper.
+- Length: usually **about 6–14 words** (tight enough to read in ~2–3 seconds, strong enough to feel like a **title**).
+- **Rotate hook patterns** based on the user topic; do **not** default to generic one-word vibes like "running tips". Prefer concrete patterns such as:
+  - **counted lists:** *top 5 running tips that actually work*, *3 signs you are overtraining*
+  - **regret / wish i knew:** *things i wish i knew before i started running*
+  - **myth / truth:** *running myths that are wasting your time*
+  - **before/after or stop/start:** *stop doing this on easy days*, *what changed when i finally warmed up*
+  - **POV / relatable:** *how i went from hating runs to craving them*
+- **`theme_title` should match this energy** (can echo slide 1 or be a slightly tighter series name; still all lowercase).
+- **Do not** put the full lesson on slide 1; **do** make the promise impossible to ignore.
+
+**slides[num_slides-1] (last slide)—keep short:**
+- **Soft closer:** **about 3–10 words**, warm sign-off, save, follow, or quiet ending (still all lowercase).
+- Examples: *save this for your next run*, *which one hits hardest*, *tell me what i missed*
 
 **Middle slides (slides[1] through slides[num_slides-2] when num_slides ≥ 3)—fuller overlay copy:**
-- This is the **actual content**: **clear, readable, valuable** lines like **before** the ultra-minimal pass—one **real idea, tip, truth, or step per slide** (or two short sentences if the topic needs it).
+- This is the **actual content**: **clear, readable, valuable** lines—one **real idea, tip, truth, or step per slide** (or two short sentences if the topic needs it).
 - Aim roughly **12–28 words** often, or **up to ~240 characters** per middle caption so it feels **substantive on screen** (still scannable, not an essay).
-- Still **lowercase**, still **soft** and peer-to-peer—**not** shouty listicle titles, **not** ALL CAPS—but **do** explain, persuade, or teach **here** the way a strong TikTok value slide would.
+- Still **lowercase**, still **soft** and peer-to-peer—**not** ALL CAPS—but **do** explain, persuade, or teach **here** the way a strong TikTok value slide would.
 
 **Shared tone (all slides):**
-- Gentle, pretty, unhurried; **you** and **i** both OK; avoid corporate jargon and toxic hustle.
-- **Avoid on every slide:** em/en dashes, trailing periods on captions, numbered hype on the **first** slide ("5 things that…" as the hook—use that energy in **middle** slides if needed, not as the whisper hook).
+- Relatable, conversational; **you** and **i** both OK; avoid corporate jargon and toxic hustle.
+- **Avoid on every slide:** em/en dashes, trailing periods on captions.
 
 **Emojis:** Prefer **none**. At most **one** emoji in the **entire** deck if it truly fits.
 
 ## Story rhythm
-1. **Slide 1:** **Short** soft open—quiet curiosity to swipe.
+1. **Slide 1:** **Bold cover hook**—specific title energy so the carousel has a clear premise.
 2. **Middle slides (if any):** **Full** beats—one meaningful layer per slide; build the arc.
 3. **Last slide:** **Short** quiet landing—warm close, tiny invitation, or soft sign-off.
 
-**Timing:** First and last ~**1–2 seconds** to read; middle slides can be **3–6 seconds** of reading time.
+**Timing:** Slide 1 ~**2–3 seconds** to read; last ~**1–2 seconds**; middle slides can be **3–6 seconds** of reading time.
 
 ## User topic
-The user's message below is the **specific topic or angle**. Adapt `theme_title`, `theme_description`, and every **`caption`** to that topic while keeping **all lowercase**, **short bookends**, and **substantive middle** captions as above.
+The user's message below is the **specific topic or angle**. Adapt `theme_title`, `theme_description`, and every **`caption`** to that topic while keeping **all lowercase**, **a strong title-style slide 1**, **short last slide**, and **substantive middle** captions as above.
 
 ## Visual shot plan (mandatory, TikTok-native variety)
 Strong slideshows **do not** repeat the same framing slide after slide. The **reference photos** may show the main subject, but your **shot_direction** must **rotate** distance, angle, and shot type: mix **main-subject beats** (tight, medium, three-quarter) with **B-roll** (related objects, environment, POV, textures, gear, drink, hands-only, ground-level, empty scene). **No two consecutive slides** should read as the **same composition recipe** (e.g. do not chain two generic "runner center frame same distance"). Think **same story world**, **clearly different frames**.
 
 **Per slide you output two strings:**
-- **caption:** on-screen text—**short** on slide 1 and last slide; **fuller** on middle slides when num_slides ≥ 3.
+- **caption:** on-screen text—**cover title hook** on slide 1 (~6–14 words); **short** on last slide; **fuller** on middle slides when num_slides ≥ 3.
 - **shot_direction:** instructions **only for the image generator** (not shown on screen). Be **concrete**: camera distance, angle, what's in frame, what's **out** of frame. Prefer **specific** labels where useful: waist-up, three-quarter, close-up on face, POV shoes, wide environment, prop on surface, etc.
 
 **Running / training: force slice-of-life variety (not only mid-stride hero)**  
@@ -102,11 +113,11 @@ Hook and closer **can** be B-roll or tighter hero; meet **both** the B-roll mini
 Respond with ONLY valid JSON (no markdown) matching this shape:
 {
   "num_slides": <integer from 1 to 12, how many images/captions this slideshow should use>,
-  "theme_title": "<short line, all lowercase, soft minimal vibe>",
+  "theme_title": "<all lowercase, same energy as slide 1: specific captivating series title>",
   "theme_description": "<1-2 short sentences, all lowercase, gentle mood for the series>",
   "slides": [
     {
-      "caption": "<slide 1: short soft hook, all lowercase, ~3–10 words | middle: fuller value line(s), all lowercase, ~12–28 words / <= ~240 chars | last: short soft closer>",
+      "caption": "<slide 1: captivating cover-style title hook, all lowercase, ~6–14 words | middle: fuller value line(s), all lowercase, ~12–28 words / <= ~240 chars | last: short soft closer, ~3–10 words>",
       "shot_direction": "<1-3 short sentences: composition for the image model, e.g. POV shoes on road, no face>"
     }
   ]
@@ -115,7 +126,7 @@ Rules:
 - **num_slides must equal slides.length** (same integer). If you miscount, the parser uses **slides.length** and ignores the wrong num_slides.
 - **Every** slide object **must** include **shot_direction** (non-empty string).
 - Choose num_slides from the topic: often **5 to 7** for a gentle series of beats; fewer if the arc is tiny.
-- **slides[0].caption** = **short** soft hook. **slides[num_slides-1].caption** = **short** soft closer. **Middle captions** (when num_slides ≥ 3) = **substantive** one-idea-per-slide content, in order.
+- **slides[0].caption** = **captivating cover / title hook** (~6–14 words, all lowercase). **slides[num_slides-1].caption** = **short** soft closer. **Middle captions** (when num_slides ≥ 3) = **substantive** one-idea-per-slide content, in order.
 - Each caption is overlaid in post; **do not** assume words appear inside the photo. Line breaks not needed (we wrap in design).
 """
 
@@ -125,7 +136,7 @@ _INSPIRATION_SUPPLEMENT = """
 - **## Reference TikTok analyses:** use for **shot variety and pacing** (B-roll vs hero, in-car, wearables, scenery, macro props)—**not** for copying caption voice.
 - **## Reference images (precomputed vision notes):** use as **factual descriptions** of reference stills available in `--input-dir`; align **shot_direction** with subjects, settings, and props you actually have. Still **original** captions for the user's topic.
 
-In all cases: **`caption` / `theme_*` text** must stay **all lowercase** with **short first/last** and **fuller middle** slides. **Do not** copy sample on-screen wording from TikTok analyses. The **user's topic is primary**.
+In all cases: **`caption` / `theme_*` text** must stay **all lowercase** with **slide 1 = strong title hook**, **last = short closer**, and **fuller middle** slides. **Do not** copy sample on-screen wording from TikTok analyses. The **user's topic is primary**.
 """
 
 
@@ -160,7 +171,7 @@ TIKTOK_MOTIVATION_CORE_SYSTEM_PROMPT = _SYSTEM
 
 _FIRST_SLIDE_PERSON_BLOCK = """
 ## First slide (mandatory for this pipeline)
-slides[0].shot_direction must describe a frame where a **person** is the **clear main subject** (face visible or obvious human figure). **Prefer waist-up, three-quarter, or medium shot** with the person readable, **not** head-to-toe full-body unless you are sure the full-body budget (floor(n/3)) allows it. **Not** environment-only, **not** object-only B-roll, **not** disembodied feet/shoes/hands-only without the person visible. Slide 1 is still the hook; follow B-roll and full-body caps on the whole deck.
+slides[0].shot_direction must describe a frame where a **person** is the **clear main subject** (face visible or obvious human figure). **Prefer waist-up, three-quarter, or medium shot** with the person readable, **not** head-to-toe full-body unless you are sure the full-body budget (floor(n/3)) allows it. **Not** environment-only, **not** object-only B-roll, **not** disembodied feet/shoes/hands-only without the person visible. Slide 1 is the **cover title** moment visually too (confident, readable subject); follow B-roll and full-body caps on the whole deck.
 """
 
 
@@ -174,10 +185,12 @@ def build_user_message(
     body = (
         "Topic / angle for this slideshow:\n"
         f"{user_prompt.strip()}\n\n"
-        "Write the JSON plan. Rhythm: slide 1 = **short** soft hook, middle slides (if n≥3) = **fuller** real content "
-        "one idea per slide (like classic TikTok value captions), last slide = **short** soft closer. "
-        "**All `caption`, `theme_title`, and `theme_description` must be entirely lowercase**; bookends stay **minimal**, "
-        "middle slides carry **substance**. "
+        "Write the JSON plan. Rhythm: slide 1 = **captivating cover-style title hook** (specific, scroll-stopping, e.g. "
+        "\"top 5 …\", \"things i wish i knew before …\", \"signs you …\" when it fits the topic), still **all lowercase** on screen; "
+        "middle slides (if n≥3) = **fuller** real content one idea per slide (like classic TikTok value captions); "
+        "last slide = **short** soft closer. "
+        "**All `caption`, `theme_title`, and `theme_description` must be entirely lowercase**; slide 1 carries **title energy**, "
+        "last stays **minimal**, middle slides carry **substance**. "
         "For every slide include shot_direction: concrete image composition, mixing hero moments with "
         "B-roll (POV details, environment, props, crops) in the same story world as the topic. "
         "Meet the B-roll minimums and **full-body cap** (at most floor(n/3) head-to-toe full-length subject shots) from the system prompt. "

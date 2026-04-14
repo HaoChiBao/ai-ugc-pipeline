@@ -50,6 +50,7 @@ For fully offline DB + files: `npm run db:up` (Docker), `DATABASE_URL=postgresql
 | `REDIS_URL` | Required when `ENABLE_ASYNC_GENERATION=true` |
 | `ENABLE_ASYNC_GENERATION` | `false` = inline generation, no worker |
 | `ENABLE_GEMINI_IMAGE_GEN` | `false` = text-only slideshows |
+| `TEST_SCRIPTS_API_URL` | Base URL for the Python FastAPI in `test_scripts` (default `http://127.0.0.1:8765`). Used for Pinterest “similar pins” on the canvas. |
 
 ## Run the app
 
