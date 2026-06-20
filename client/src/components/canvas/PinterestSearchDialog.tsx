@@ -43,8 +43,8 @@ export function PinterestSearchDialog({
         <DialogHeader>
           <DialogTitle>Search Pinterest pins</DialogTitle>
           <DialogDescription>
-            Runs a Pinterest search via the local test_scripts API (gallery-dl).
-            Matching images are placed in a new group on the canvas.
+            Search Pinterest and add matching pins to the canvas. Results are
+            fetched by this app&apos;s API on Vercel — no separate backend to run.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-2 py-1">

@@ -44,7 +44,7 @@ export function PinterestUrlDialog({
           <DialogTitle>Add Pinterest pin</DialogTitle>
           <DialogDescription>
             Paste a pin link (pinterest.com/pin/… or pin.it/…). Preview loads via
-            Pinterest oEmbed; similar pins use the local test_scripts API.
+            Pinterest oEmbed; similar pins use the built-in API.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-2 py-1">

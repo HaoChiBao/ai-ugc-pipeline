@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
 
+export const runtime = "nodejs";
+export const maxDuration = 30;
+
 /**
  * Server-side Pinterest oEmbed (avoids browser CORS). Public Pinterest API.
  */

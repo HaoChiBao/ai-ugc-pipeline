@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 export const runtime = "nodejs";
+export const maxDuration = 30;
 
 function allowedImageFetchHost(host: string): boolean {
   const h = host.toLowerCase();

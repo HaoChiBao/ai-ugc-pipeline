@@ -840,8 +840,7 @@ export function InfiniteCanvas() {
         const list = data.images ?? [];
         if (list.length === 0) {
           toast.message("No images returned", {
-            description:
-              "Start the test_scripts API (uvicorn) and ensure gallery-dl can reach Pinterest.",
+            description: "Pinterest did not return any similar pins for this pin.",
           });
           return;
         }
