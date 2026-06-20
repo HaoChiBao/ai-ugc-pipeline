@@ -1,6 +1,7 @@
-import type { CanvasItem, TextCanvasItem } from "@/lib/canvas/types";
+import type { CanvasItem } from "./types";
+import type { EffectiveItemLayout } from "./groupLayout";
 
-function isAttachedCaption(item: CanvasItem): item is TextCanvasItem {
+function isAttachedCaption(item: CanvasItem): boolean {
   return (
     item.type === "text" &&
     Boolean(item.attachedToImageId || item.attachedToPinterestItemId)
@@ -21,15 +22,44 @@ export function worldRectsIntersect(
   return !(ax + aw < bx || ax > bx + bw || ay + ah < by || ay > by + bh);
 }
 
+export function getEffectiveItemRect(
+  item: CanvasItem,
+  layoutMap?: Map<string, EffectiveItemLayout> | null,
+): { x: number; y: number; width: number; height: number } {
+  const layout = layoutMap?.get(item.id);
+  return {
+    x: layout?.x ?? item.x,
+    y: layout?.y ?? item.y,
+    width: item.width,
+    height: item.height,
+  };
+}
+
+/** Hit-test using on-screen layout (groups, collapsed stacks, grids). */
 export function itemIntersectsWorldRect(
   item: CanvasItem,
   rx: number,
   ry: number,
   rw: number,
   rh: number,
+  layoutMap?: Map<string, EffectiveItemLayout> | null,
 ): boolean {
   if (isAttachedCaption(item)) {
     return false;
   }
-  return worldRectsIntersect(rx, ry, rw, rh, item.x, item.y, item.width, item.height);
+  const bounds = getEffectiveItemRect(item, layoutMap);
+  return worldRectsIntersect(
+    rx,
+    ry,
+    rw,
+    rh,
+    bounds.x,
+    bounds.y,
+    bounds.width,
+    bounds.height,
+  );
+}
+
+export function isMarqueeSelectableItem(item: CanvasItem): boolean {
+  return item.type === "image" || item.type === "pinterest";
 }

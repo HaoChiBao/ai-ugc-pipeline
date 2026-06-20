@@ -90,6 +90,7 @@ type CanvasImageItemProps = {
   getImageWorldTopLeft?: (id: string) => { x: number; y: number } | undefined;
   /** Selected images moving together (expanded group, etc.) */
   onImageMultiDragStart?: (imageIds: string[]) => void;
+  onItemContextMenu?: (itemId: string, e: React.MouseEvent) => void;
 };
 
 export function CanvasImageItem({
@@ -116,6 +117,7 @@ export function CanvasImageItem({
   getImageWorldTopLeft,
   onImageMultiDragStart,
   attachedCaptions = [],
+  onItemContextMenu,
 }: CanvasImageItemProps) {
   const [similarBusy, setSimilarBusy] = useState(false);
   /** Single-image drag: visual position without patching doc each frame (avoids full-canvas re-renders). */
@@ -497,6 +499,15 @@ export function CanvasImageItem({
     similarBusy,
   ]);
 
+  const handleContextMenu = useCallback(
+    (e: React.MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      onItemContextMenu?.(item.id, e);
+    },
+    [item.id, onItemContextMenu],
+  );
+
   const left = liveDragPos?.x ?? layoutOverride?.x ?? item.x;
   const top = liveDragPos?.y ?? layoutOverride?.y ?? item.y;
   const layoutZ = layoutOverride?.zIndex;
@@ -535,6 +546,7 @@ export function CanvasImageItem({
         onPointerMove={handleBodyMove}
         onPointerUp={onBodyPointerUp}
         onPointerCancel={onBodyPointerUp}
+        onContextMenu={handleContextMenu}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img

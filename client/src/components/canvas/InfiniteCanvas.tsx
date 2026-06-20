@@ -18,9 +18,14 @@ import {
   groupImageBoundsForMemberIds,
   resolveExistingGroupIdForMember,
   isGroupMemberItem,
+  type GroupMemberItem,
   worldAabbOverlap,
 } from "@/lib/canvas/groupLayout";
-import { itemIntersectsWorldRect } from "@/lib/canvas/intersects";
+import { itemIntersectsWorldRect, isMarqueeSelectableItem } from "@/lib/canvas/intersects";
+import {
+  contextMenuTargetIds,
+  downloadableIdsFromSelection,
+} from "@/lib/canvas/canvasSelection";
 import { screenToWorld } from "@/lib/canvas/transforms";
 import {
   computeInitialImageSize,
@@ -32,15 +37,14 @@ import {
   revokeObjectUrl,
 } from "@/lib/canvas/files";
 import {
-  DEFAULT_TIKTOK_NODE_HEIGHT,
-  DEFAULT_TIKTOK_NODE_WIDTH,
+  DEFAULT_PIN_CARD_HEIGHT,
+  DEFAULT_PIN_CARD_WIDTH,
   DEFAULT_ZOOM,
   type CanvasGroup,
   type CanvasItem,
   type ImageCanvasItem,
   type PinterestCanvasItem,
   type PinterestSimilarRequest,
-  type TikTokCanvasItem,
   type ViewportState,
 } from "@/lib/canvas/types";
 import { useCanvasWorkspace } from "@/components/canvas/CanvasWorkspaceContext";
@@ -51,8 +55,7 @@ import { fetchPinterestPreview } from "@/lib/url-nodes/pinterest/fetchPinterestP
 import {
   normalizePinterestUrl,
 } from "@/lib/url-nodes/pinterest/validatePinterestUrl";
-import { fetchTikTokPreview } from "@/lib/url-nodes/tiktok/fetchTikTokPreview";
-import { normalizeTikTokUrl } from "@/lib/url-nodes/tiktok/validateTikTokUrl";
+import { downloadCanvasItems } from "@/lib/canvas/downloadCanvasItems";
 import { looksLikeWebUrl } from "@/lib/url-nodes/looksLikeWebUrl";
 import { CanvasGroupMergeHighlight } from "./CanvasGroupMergeHighlight";
 import { CanvasPairGroupHighlight } from "./CanvasPairGroupHighlight";
@@ -62,9 +65,12 @@ import { CanvasViewport } from "./CanvasViewport";
 import { CanvasItemsLayer } from "./CanvasItemsLayer";
 import { CanvasToolbar } from "./CanvasToolbar";
 import { CanvasDropOverlay } from "./CanvasDropOverlay";
+import {
+  CanvasItemContextMenu,
+  type CanvasItemContextMenuState,
+} from "./CanvasItemContextMenu";
 import { PinterestSearchDialog } from "./PinterestSearchDialog";
 import { PinterestUrlDialog } from "./PinterestUrlDialog";
-import { TikTokUrlDialog } from "./TikTokUrlDialog";
 import {
   ImageTextEditorPanel,
   type CanvasTextEditSubject,
@@ -86,12 +92,12 @@ type Placement =
 export function InfiniteCanvas() {
   const viewportRef = useRef<HTMLDivElement>(null);
   const itemsRef = useRef<CanvasItem[]>([]);
+  const viewportPxRef = useRef({ w: 800, h: 600 });
   const viewportStateRef = useRef<ViewportState>({
     panX: 0,
     panY: 0,
     zoom: DEFAULT_ZOOM,
   });
-  const [tiktokDialogOpen, setTiktokDialogOpen] = useState(false);
   const [pinterestDialogOpen, setPinterestDialogOpen] = useState(false);
   const [pinterestSearchDialogOpen, setPinterestSearchDialogOpen] =
     useState(false);
@@ -155,6 +161,8 @@ export function InfiniteCanvas() {
     string | null
   >(null);
   const [similarPinUrlInput, setSimilarPinUrlInput] = useState("");
+  const [contextMenu, setContextMenu] =
+    useState<CanvasItemContextMenuState | null>(null);
 
   const groupsRef = useRef(groups);
   groupsRef.current = groups;
@@ -214,6 +222,7 @@ export function InfiniteCanvas() {
   }, [textEditTarget, textEditSubjectResolved]);
 
   itemsRef.current = items;
+  viewportPxRef.current = viewportPx;
   viewportStateRef.current = viewport;
 
   useLayoutEffect(() => {
@@ -329,9 +338,8 @@ export function InfiniteCanvas() {
         hoverPreviewGroupId,
       );
       const dragged = itemsNow.find(
-        (i) =>
-          i.id === draggedId &&
-          (i.type === "image" || i.type === "pinterest"),
+        (i): i is GroupMemberItem =>
+          i.id === draggedId && isGroupMemberItem(i),
       );
       const hit = findTopImageUnderWorldPoint(
         itemsNow,
@@ -399,9 +407,8 @@ export function InfiniteCanvas() {
         null,
       );
       const dragged = itemsNow.find(
-        (i) =>
-          i.id === draggedId &&
-          (i.type === "image" || i.type === "pinterest"),
+        (i): i is GroupMemberItem =>
+          i.id === draggedId && isGroupMemberItem(i),
       );
       const hit = findTopImageUnderWorldPoint(
         itemsNow,
@@ -475,9 +482,8 @@ export function InfiniteCanvas() {
         const docItems = itemsRef.current;
         const docGroups = groupsRef.current;
         const it = docItems.find(
-          (i) =>
-            i.id === imageId &&
-            (i.type === "image" || i.type === "pinterest"),
+          (i): i is GroupMemberItem =>
+            i.id === imageId && isGroupMemberItem(i),
         );
         if (!it?.groupId) return;
         const g = docGroups.find((x) => x.id === it.groupId);
@@ -730,99 +736,12 @@ export function InfiniteCanvas() {
     [addItem],
   );
 
-  const addTikTokFromUrl = useCallback(
-    async (canonicalUrl: string) => {
-      const world = centerWorldPlacement();
-      const id = crypto.randomUUID();
-      const w = DEFAULT_TIKTOK_NODE_WIDTH;
-      const h = DEFAULT_TIKTOK_NODE_HEIGHT;
-
-      const item: TikTokCanvasItem = {
-        id,
-        type: "tiktok",
-        url: canonicalUrl,
-        x: world.x - w / 2,
-        y: world.y - h / 2,
-        width: w,
-        height: h,
-        title: "Loading…",
-        thumbnailUrl: null,
-        authorName: null,
-        previewStatus: "loading",
-      };
-      addItem(item);
-      toast.success("TikTok URL added");
-
-      try {
-        const preview = await fetchTikTokPreview(canonicalUrl);
-        patchItem(id, {
-          title: preview.title,
-          thumbnailUrl: preview.thumbnailUrl,
-          authorName: preview.authorName,
-          previewStatus: "ready",
-          previewError: undefined,
-        });
-        if (preview.previewLimited) {
-          toast.message("TikTok preview limited", {
-            description:
-              "Thumbnail/title may be unavailable for this post type; the link is still on the canvas.",
-          });
-        } else {
-          toast.success("TikTok preview loaded");
-        }
-      } catch {
-        patchItem(id, {
-          previewStatus: "error",
-          previewError: "Preview unavailable",
-          title: "TikTok",
-        });
-        toast.error("TikTok preview failed");
-      }
-
-      patchItem(id, { analysisStatus: "loading", analysisError: undefined });
-      try {
-        const res = await fetch("/api/tiktok/analyze", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ url: canonicalUrl }),
-        });
-        const data = (await res.json().catch(() => ({}))) as {
-          error?: string;
-          contextText?: string;
-        };
-        if (!res.ok) {
-          patchItem(id, {
-            analysisStatus: "error",
-            analysisError:
-              typeof data.error === "string"
-                ? data.error
-                : "Context extraction failed",
-          });
-          return;
-        }
-        const contextText =
-          typeof data.contextText === "string" ? data.contextText : "";
-        patchItem(id, {
-          analysisStatus: "ready",
-          analysisContextText: contextText,
-          analysisError: undefined,
-        });
-      } catch {
-        patchItem(id, {
-          analysisStatus: "error",
-          analysisError: "Could not reach analysis service",
-        });
-      }
-    },
-    [addItem, centerWorldPlacement, patchItem],
-  );
-
   const addPinterestFromUrl = useCallback(
     async (pinUrl: string) => {
       const world = centerWorldPlacement();
       const id = crypto.randomUUID();
-      const w = DEFAULT_TIKTOK_NODE_WIDTH;
-      const h = DEFAULT_TIKTOK_NODE_HEIGHT;
+      const w = DEFAULT_PIN_CARD_WIDTH;
+      const h = DEFAULT_PIN_CARD_HEIGHT;
 
       const item: PinterestCanvasItem = {
         id,
@@ -1095,11 +1014,6 @@ export function InfiniteCanvas() {
 
   const onPlainTextPaste = useCallback(
     (text: string) => {
-      const canonical = normalizeTikTokUrl(text);
-      if (canonical) {
-        void addTikTokFromUrl(canonical);
-        return;
-      }
       const pinUrl = normalizePinterestUrl(text);
       if (pinUrl) {
         void addPinterestFromUrl(pinUrl);
@@ -1107,11 +1021,11 @@ export function InfiniteCanvas() {
       }
       if (looksLikeWebUrl(text)) {
         toast.message("Unsupported link", {
-          description: "Paste a TikTok or Pinterest pin URL",
+          description: "Paste a Pinterest pin URL",
         });
       }
     },
-    [addPinterestFromUrl, addTikTokFromUrl],
+    [addPinterestFromUrl],
   );
 
   const onNonImagePaste = useCallback(() => {
@@ -1240,8 +1154,18 @@ export function InfiniteCanvas() {
         const rw = wx2 - wx1;
         const rh = wy2 - wy1;
 
-        const hit = itemsRef.current.filter((item) =>
-          itemIntersectsWorldRect(item, wx1, wy1, rw, rh),
+        const layout = computeGroupLayoutMap(
+          itemsRef.current,
+          groupsRef.current,
+          v,
+          viewportPxRef.current,
+          null,
+        );
+
+        const hit = itemsRef.current.filter(
+          (item) =>
+            isMarqueeSelectableItem(item) &&
+            itemIntersectsWorldRect(item, wx1, wy1, rw, rh, layout),
         );
         const ids = hit.map((it) => it.id);
         if (ev.shiftKey) {
@@ -1274,6 +1198,71 @@ export function InfiniteCanvas() {
         : `${selectedIds.length} items removed`,
     );
   }, [removeItems, selectedIds]);
+
+  const onItemContextMenu = useCallback(
+    (itemId: string, e: React.MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const targetIds = contextMenuTargetIds(
+        itemsRef.current,
+        itemId,
+        selectedIds,
+      );
+      if (!selectedIds.includes(itemId)) {
+        select(itemId, { additive: false });
+      }
+      setContextMenu({
+        x: e.clientX,
+        y: e.clientY,
+        targetIds,
+      });
+    },
+    [selectedIds, select],
+  );
+
+  const onDownloadFromContextMenu = useCallback(
+    async (ids: string[]) => {
+      const downloadIds = downloadableIdsFromSelection(
+        itemsRef.current,
+        ids,
+      );
+      const { downloaded, failed, skipped } = await downloadCanvasItems(
+        itemsRef.current,
+        downloadIds,
+      );
+      if (downloaded === 0) {
+        toast.error(
+          failed > 0
+            ? "Could not download images"
+            : "No downloadable images in selection",
+        );
+        return;
+      }
+      const parts: string[] = [];
+      if (downloaded === 1) {
+        parts.push("Downloaded 1 image");
+      } else {
+        parts.push(`Downloaded ${downloaded} images as ZIP`);
+      }
+      if (failed > 0) parts.push(`${failed} failed`);
+      if (skipped > 0) parts.push(`${skipped} skipped`);
+      toast.success(parts.join(" · "));
+    },
+    [],
+  );
+
+  const onDeleteFromContextMenu = useCallback(
+    (ids: string[]) => {
+      if (ids.length === 0) return;
+      removeItems(ids);
+      toast.message(
+        ids.length === 1
+          ? "Removed from canvas"
+          : `${ids.length} items removed`,
+      );
+    },
+    [removeItems],
+  );
 
   useEffect(() => {
     const isEditableTarget = (t: EventTarget | null) => {
@@ -1319,19 +1308,6 @@ export function InfiniteCanvas() {
     return () => window.removeEventListener("keydown", onKey);
   }, [onDeleteSelected, redo, selectedIds, undo]);
 
-  const onTikTokModalSubmit = useCallback(
-    (raw: string) => {
-      const canonical = normalizeTikTokUrl(raw);
-      if (!canonical) {
-        toast.error("Not a valid TikTok URL");
-        return;
-      }
-      void addTikTokFromUrl(canonical);
-      setTiktokDialogOpen(false);
-    },
-    [addTikTokFromUrl],
-  );
-
   const onPinterestModalSubmit = useCallback(
     (raw: string) => {
       const canonical = normalizePinterestUrl(raw);
@@ -1351,8 +1327,8 @@ export function InfiniteCanvas() {
       if (!q) return;
       setPinterestSearchDialogOpen(false);
       const world = centerWorldPlacement();
-      const w = DEFAULT_TIKTOK_NODE_WIDTH;
-      const h = DEFAULT_TIKTOK_NODE_HEIGHT;
+      const w = DEFAULT_PIN_CARD_WIDTH;
+      const h = DEFAULT_PIN_CARD_HEIGHT;
       const anchor = {
         x: world.x - w / 2,
         y: world.y - h / 2,
@@ -1426,6 +1402,7 @@ export function InfiniteCanvas() {
             }
             onImageMultiDragStart={onImageMultiDragStart}
             onRequestSimilarPinUrl={onRequestSimilarPinUrl}
+            onItemContextMenu={onItemContextMenu}
           />
           <CanvasGroupMergeHighlight
             groupId={mergeHoverGroupId}
@@ -1473,9 +1450,20 @@ export function InfiniteCanvas() {
         onGoToGroup={onGoToGroupFromRail}
       />
 
+      <CanvasItemContextMenu
+        menu={contextMenu}
+        items={items}
+        onClose={() => setContextMenu(null)}
+        onDelete={onDeleteFromContextMenu}
+        onDownload={(ids) => void onDownloadFromContextMenu(ids)}
+        onEditImageText={(id) => setTextEditTarget({ kind: "image", id })}
+        onEditPinterestText={(id) =>
+          setTextEditTarget({ kind: "pinterest", id })
+        }
+      />
+
       <CanvasToolbar
         onUploadClick={openFileDialog}
-        onAddTikTokClick={() => setTiktokDialogOpen(true)}
         onAddPinterestSearchClick={() => setPinterestSearchDialogOpen(true)}
         onAddPinterestPinUrlClick={() => setPinterestDialogOpen(true)}
         onResetView={resetView}
@@ -1485,22 +1473,6 @@ export function InfiniteCanvas() {
         onRedo={redo}
         canUndo={canUndo}
         canRedo={canRedo}
-      />
-      <p
-        className="pointer-events-none absolute bottom-16 left-1/2 z-20 max-w-[min(100%,28rem)] -translate-x-1/2 px-2 text-center text-[10px] text-muted-foreground"
-        suppressHydrationWarning
-      >
-        Delete/Backspace removes selection · ⌘/Ctrl+Z undo · Shift+⌘/Ctrl+Z redo ·
-        Hover a stack for a slight fan · Click stack to expand ·
-        ✕ on outline to close · Hold over another ungrouped image ~0.5s, then
-        release to create a group · Captions: pencil on selected image or
-        Pinterest pin
-      </p>
-
-      <TikTokUrlDialog
-        open={tiktokDialogOpen}
-        onOpenChange={setTiktokDialogOpen}
-        onSubmitUrl={onTikTokModalSubmit}
       />
 
       <PinterestUrlDialog

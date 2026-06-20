@@ -17,7 +17,6 @@ import type { EffectiveItemLayout } from "@/lib/canvas/groupLayout";
 import { CanvasImageItem } from "./CanvasImageItem";
 import { CanvasPinterestItem } from "./CanvasPinterestItem";
 import { CanvasTextItem } from "./CanvasTextItem";
-import { CanvasTikTokItem } from "./CanvasTikTokItem";
 
 type ToWorld = (clientX: number, clientY: number) => { x: number; y: number };
 
@@ -56,6 +55,7 @@ type CanvasItemsLayerProps = {
   onOpenPinterestTextEditor?: (pinterestItemId: string) => void;
   onRequestSimilarPinUrl?: (imageId: string) => void;
   onImageMultiDragStart?: (imageIds: string[]) => void;
+  onItemContextMenu?: (itemId: string, e: React.MouseEvent) => void;
 };
 
 export function CanvasItemsLayer({
@@ -81,6 +81,7 @@ export function CanvasItemsLayer({
   onOpenPinterestTextEditor,
   onRequestSimilarPinUrl,
   onImageMultiDragStart,
+  onItemContextMenu,
 }: CanvasItemsLayerProps) {
   const px = viewportPx ?? { w: 800, h: 600 };
   const layoutMap = useMemo(
@@ -207,20 +208,7 @@ export function CanvasItemsLayer({
               getImageWorldTopLeft={getImageWorldTopLeft}
               onImageMultiDragStart={onImageMultiDragStart}
               attachedCaptions={captionsByImageId.get(item.id) ?? []}
-            />
-          );
-        }
-        if (item.type === "tiktok") {
-          return (
-            <CanvasTikTokItem
-              key={item.id}
-              item={item}
-              items={items}
-              selectedIds={selectedIds}
-              isSelected={selectedSet.has(item.id)}
-              toWorld={toWorld}
-              onSelect={(additive) => onSelectItem(item.id, additive)}
-              onUpdateItem={onUpdateItem}
+              onItemContextMenu={onItemContextMenu}
             />
           );
         }
@@ -262,6 +250,7 @@ export function CanvasItemsLayer({
               onGroupMemberDragEnd={onGroupMemberDragEnd}
               getImageWorldTopLeft={getImageWorldTopLeft}
               onImageMultiDragStart={onImageMultiDragStart}
+              onItemContextMenu={onItemContextMenu}
             />
           );
         }
@@ -283,6 +272,7 @@ export function CanvasItemsLayer({
               onSelect={(additive) => onSelectItem(item.id, additive)}
               onUpdateItem={onUpdateItem}
               layoutOverride={layoutOverride}
+              onItemContextMenu={onItemContextMenu}
             />
           );
         }

@@ -6,15 +6,15 @@ import {
   useContext,
   useMemo,
   useRef,
-  useState,
 } from "react";
+import { useCanvasPersistence } from "@/hooks/canvas/useCanvasPersistence";
 import { useCanvasState } from "@/hooks/canvas/useCanvasState";
 import { useCanvasViewport } from "@/hooks/canvas/useCanvasViewport";
 
 type CanvasWorkspaceValue = ReturnType<typeof useCanvasState> &
   ReturnType<typeof useCanvasViewport> & {
-    projectId: string | null;
-    setProjectId: (id: string | null) => void;
+    /** False until local board snapshot has been restored (if any). */
+    boardHydrated: boolean;
     /** World coordinates at the center of the canvas viewport (updated by InfiniteCanvas). */
     getCanvasViewportCenterWorld: () => { x: number; y: number };
     setCanvasViewportCenterWorldGetter: (
@@ -35,16 +35,22 @@ export function CanvasWorkspaceProvider({
 }) {
   const canvas = useCanvasState();
   const viewport = useCanvasViewport();
-  const [projectId, setProjectId] = useState<string | null>(null);
+  const { hydrated } = useCanvasPersistence(
+    {
+      items: canvas.items,
+      groups: canvas.groups,
+      loadDoc: canvas.loadDoc,
+    },
+    {
+      viewport: viewport.viewport,
+      setViewport: viewport.setViewport,
+    },
+  );
   const viewportCenterWorldRef = useRef<() => { x: number; y: number }>(() => ({
     x: 0,
     y: 0,
   }));
   const focusGroupHandlerRef = useRef<((groupId: string) => void) | null>(null);
-
-  const setProjectIdStable = useCallback((id: string | null) => {
-    setProjectId(id);
-  }, []);
 
   const setCanvasViewportCenterWorldGetter = useCallback(
     (fn: () => { x: number; y: number }) => {
@@ -73,8 +79,7 @@ export function CanvasWorkspaceProvider({
     () => ({
       ...canvas,
       ...viewport,
-      projectId,
-      setProjectId: setProjectIdStable,
+      boardHydrated: hydrated,
       getCanvasViewportCenterWorld,
       setCanvasViewportCenterWorldGetter,
       focusGroupOnCanvas,
@@ -83,8 +88,7 @@ export function CanvasWorkspaceProvider({
     [
       canvas,
       viewport,
-      projectId,
-      setProjectIdStable,
+      hydrated,
       getCanvasViewportCenterWorld,
       setCanvasViewportCenterWorldGetter,
       focusGroupOnCanvas,

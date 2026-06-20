@@ -1,4 +1,4 @@
-export type CanvasItemType = "image" | "tiktok" | "pinterest" | "text";
+export type CanvasItemType = "image" | "pinterest" | "text";
 
 export type CanvasItemBase = {
   id: string;
@@ -58,24 +58,6 @@ export type ImageCanvasItem = CanvasItemBase & {
   imageObjectFit?: "contain" | "cover";
 };
 
-export type TikTokPreviewStatus = "loading" | "ready" | "error";
-
-export type TikTokAnalysisStatus = "idle" | "loading" | "ready" | "error";
-
-export type TikTokCanvasItem = CanvasItemBase & {
-  type: "tiktok";
-  url: string;
-  title: string;
-  thumbnailUrl: string | null;
-  authorName: string | null;
-  previewStatus: TikTokPreviewStatus;
-  previewError?: string;
-  /** Vision + metadata extraction for agent context and canvas overlay */
-  analysisStatus?: TikTokAnalysisStatus;
-  analysisError?: string;
-  analysisContextText?: string;
-};
-
 export type PinterestPreviewStatus = "loading" | "ready" | "error";
 
 export type PinterestCanvasItem = CanvasItemBase & {
@@ -115,7 +97,6 @@ export const DEFAULT_CAPTION_FONT_PX = 18;
 
 export type CanvasItem =
   | ImageCanvasItem
-  | TikTokCanvasItem
   | PinterestCanvasItem
   | TextCanvasItem;
 
@@ -147,11 +128,8 @@ export type CanvasItemPatch = Partial<
     title: string;
     thumbnailUrl: string | null;
     authorName: string | null;
-    previewStatus: TikTokPreviewStatus | PinterestPreviewStatus;
+    previewStatus: PinterestPreviewStatus;
     previewError: string | undefined;
-    analysisStatus: TikTokAnalysisStatus;
-    analysisError: string | undefined;
-    analysisContextText: string | undefined;
     text: string;
     fontSize: number;
     fontFamily: string;
@@ -175,5 +153,5 @@ export const MIN_ZOOM = 0.1;
 export const MAX_ZOOM = 4;
 export const DEFAULT_ZOOM = 1;
 
-export const DEFAULT_TIKTOK_NODE_WIDTH = 340;
-export const DEFAULT_TIKTOK_NODE_HEIGHT = 260;
+export const DEFAULT_PIN_CARD_WIDTH = 340;
+export const DEFAULT_PIN_CARD_HEIGHT = 260;

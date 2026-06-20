@@ -4,40 +4,17 @@ export const runtime = "nodejs";
 
 function allowedImageFetchHost(host: string): boolean {
   const h = host.toLowerCase();
-  if (
+  return (
     h === "pinimg.com" ||
     h.endsWith(".pinimg.com") ||
     h.includes("pinterest.com") ||
     h === "pin.it" ||
     h.endsWith(".pin.it")
-  ) {
-    return true;
-  }
-  /* TikTok oEmbed thumbnails (CDN hosts vary by region) */
-  if (h.includes("tiktokcdn")) return true;
-  if (h.endsWith(".tiktok.com") || h === "tiktok.com") return true;
-  if (h.includes("ttwstatic")) return true;
-  if (h.includes("muscdn")) return true;
-  return false;
-}
-
-function refererForHost(host: string): string {
-  const h = host.toLowerCase();
-  if (
-    h.includes("tiktokcdn") ||
-    h.endsWith(".tiktok.com") ||
-    h === "tiktok.com" ||
-    h.includes("ttwstatic") ||
-    h.includes("muscdn")
-  ) {
-    return "https://www.tiktok.com/";
-  }
-  return "https://www.pinterest.com/";
+  );
 }
 
 /**
- * Server-side fetch for Pinterest and TikTok CDN thumbnails (avoids browser
- * CORS when building slideshow multipart uploads from preview URLs).
+ * Server-side fetch for Pinterest CDN thumbnails (avoids browser CORS).
  */
 export async function GET(req: Request) {
   const raw = new URL(req.url).searchParams.get("url");
@@ -59,7 +36,7 @@ export async function GET(req: Request) {
 
   const res = await fetch(target.toString(), {
     headers: {
-      Referer: refererForHost(target.hostname),
+      Referer: "https://www.pinterest.com/",
       "User-Agent":
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
     },

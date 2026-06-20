@@ -26,6 +26,7 @@ type CanvasTextItemProps = {
   onSelect: (additive: boolean) => void;
   onUpdateItem: (id: string, patch: CanvasItemPatch) => void;
   layoutOverride?: EffectiveItemLayout | null;
+  onItemContextMenu?: (itemId: string, e: React.MouseEvent) => void;
 };
 
 type TextDrag = {
@@ -43,6 +44,7 @@ export function CanvasTextItem({
   onSelect,
   onUpdateItem,
   layoutOverride,
+  onItemContextMenu,
 }: CanvasTextItemProps) {
   const [dragging, setDragging] = useState(false);
 
@@ -242,6 +244,15 @@ export function CanvasTextItem({
   const zIndex =
     (item.stackPriority ?? 0) * 10_000 + (layoutZ ?? 8);
 
+  const handleContextMenu = useCallback(
+    (e: React.MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      onItemContextMenu?.(item.id, e);
+    },
+    [item.id, onItemContextMenu],
+  );
+
   return (
     <div
       className="group absolute box-border select-none transition-[left,top] duration-200 ease-out"
@@ -270,6 +281,7 @@ export function CanvasTextItem({
         onPointerMove={onBodyPointerMove}
         onPointerUp={onBodyPointerUp}
         onPointerCancel={onBodyPointerUp}
+        onContextMenu={handleContextMenu}
       >
         <div
           data-caption-grab

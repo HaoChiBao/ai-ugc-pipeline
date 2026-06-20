@@ -81,6 +81,7 @@ type CanvasPinterestItemProps = {
   ) => void;
   getImageWorldTopLeft?: (id: string) => { x: number; y: number } | undefined;
   onImageMultiDragStart?: (imageIds: string[]) => void;
+  onItemContextMenu?: (itemId: string, e: React.MouseEvent) => void;
 };
 
 export function CanvasPinterestItem({
@@ -106,6 +107,7 @@ export function CanvasPinterestItem({
   onGroupMemberDragEnd,
   getImageWorldTopLeft,
   onImageMultiDragStart,
+  onItemContextMenu,
 }: CanvasPinterestItemProps) {
   const [similarBusy, setSimilarBusy] = useState(false);
   const [liveDragPos, setLiveDragPos] = useState<{
@@ -462,6 +464,15 @@ export function CanvasPinterestItem({
     }
   }, [item, layoutOverride, liveDragPos, onSimilar, similarBusy]);
 
+  const handleContextMenu = useCallback(
+    (e: React.MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      onItemContextMenu?.(item.id, e);
+    },
+    [item.id, onItemContextMenu],
+  );
+
   const showHoverChrome =
     item.previewStatus === "ready" || item.previewStatus === "error";
 
@@ -499,6 +510,7 @@ export function CanvasPinterestItem({
         onPointerMove={handleBodyMove}
         onPointerUp={onBodyPointerUp}
         onPointerCancel={onBodyPointerUp}
+        onContextMenu={handleContextMenu}
       >
         {item.previewStatus === "loading" && (
           <div className="flex h-full w-full items-center justify-center">

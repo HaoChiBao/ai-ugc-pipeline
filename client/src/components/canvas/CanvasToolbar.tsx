@@ -4,7 +4,6 @@ import { Menu } from "@base-ui/react/menu";
 import { mergeProps } from "@base-ui/react/merge-props";
 import {
   ImagePlus,
-  Music2,
   Pin,
   Redo2,
   RefreshCw,
@@ -23,7 +22,6 @@ import { cn } from "@/lib/utils";
 
 type CanvasToolbarProps = {
   onUploadClick: () => void;
-  onAddTikTokClick: () => void;
   onAddPinterestSearchClick: () => void;
   onAddPinterestPinUrlClick: () => void;
   onResetView: () => void;
@@ -38,7 +36,6 @@ type CanvasToolbarProps = {
 
 export function CanvasToolbar({
   onUploadClick,
-  onAddTikTokClick,
   onAddPinterestSearchClick,
   onAddPinterestPinUrlClick,
   onResetView,
@@ -79,27 +76,6 @@ export function CanvasToolbar({
             )}
           />
           <TooltipContent side="top">Upload image</TooltipContent>
-        </Tooltip>
-
-        <Tooltip>
-          <TooltipTrigger
-            render={(props) => (
-              <Button
-                {...props}
-                type="button"
-                variant="outline"
-                size="icon-sm"
-                aria-label="Add TikTok URL"
-                onClick={(e) => {
-                  props.onClick?.(e);
-                  onAddTikTokClick();
-                }}
-              >
-                <Music2 className="size-4" />
-              </Button>
-            )}
-          />
-          <TooltipContent side="top">Add TikTok URL</TooltipContent>
         </Tooltip>
 
         <Menu.Root modal={false}>

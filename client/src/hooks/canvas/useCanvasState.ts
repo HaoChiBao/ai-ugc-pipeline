@@ -13,6 +13,7 @@ import type {
   ImageCanvasItem,
   PinterestCanvasItem,
 } from "@/lib/canvas/types";
+import { clearPersistedCanvas } from "@/lib/canvas/canvasPersistence";
 import { revokeObjectUrl } from "@/lib/canvas/files";
 
 type CanvasDocState = {
@@ -471,6 +472,7 @@ export function useCanvasState() {
 
   const clearAll = useCallback(() => {
     dispatch({ type: "CLEAR_ALL" });
+    void clearPersistedCanvas();
   }, [dispatch]);
 
   const addGroup = useCallback(
@@ -494,10 +496,36 @@ export function useCanvasState() {
     [dispatch],
   );
 
+  /** Replace document from persistence (no undo history). */
+  const loadDoc = useCallback(
+    (doc: { items: CanvasItem[]; groups: CanvasGroup[] }) => {
+      setState((current) => {
+        revokeOrphans(current.items, doc.items);
+        pastRef.current = [];
+        futureRef.current = [];
+        patchGroupRef.current = { id: null, t: 0 };
+        flushHistoryAvailability(setHistoryAvail, pastRef, futureRef);
+        return {
+          items: doc.items.map((i) => ({ ...i }) as CanvasItem),
+          groups: doc.groups.map((g) => ({
+            ...g,
+            memberImageIds: [...g.memberImageIds],
+            ...(g.expandedGrid
+              ? { expandedGrid: { ...g.expandedGrid } }
+              : {}),
+          })),
+          selectedIds: [],
+        };
+      });
+    },
+    [],
+  );
+
   return {
     items: state.items,
     selectedIds: state.selectedIds,
     groups: state.groups,
+    loadDoc,
     addItem,
     addGroup,
     removeItem,
